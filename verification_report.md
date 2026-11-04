@@ -1,65 +1,92 @@
-# Verification report (Part C)
+# Verification report
 
-## Your own runs
+## Own runs
 
-Paste your checker's output for participants 3 and 6. 
+The participant 3 and 6 Run-mode files are pending. Their checker output and
+observations will go here after data collection.
 
-```
-(paste here)
-```
+## Six supplied runs
 
-For each property marked PILOT, say how you established it: what you watched
-for, and what would have counted as a failure.
+Q1 compares the recorded participant and ten input fields with the expected
+canonical list. Q2 compares the ordered sequence of (phase, trial_index,
+item_id), including missing or repeated trials. For all six files, the literal
+startup entry, experiment path, and file-loading method remain PILOT. None of
+those actions can be established from the CSV alone.
 
-For any FAIL: what was wrong, what you changed, and the commit that fixed it.
-If you fixed it, rerun and paste the new output too.
+The first checker results appear at the end of this report and in commit
+`7bdb1c6`. After that commit, the trial records were compared with all eight
+canonical lists, both by row position and without regard to order. The extra
+checks on scoring, displayed text and timestamps below are observations about
+the six builds. They are separate from the Q1 and Q2 verdicts.
 
-## The six provided files
+### File A, participant 3
 
-Each of `provided/output_files/file_A.csv` … `file_F.csv` came from a
-different build of this task, run by a different participant (the number is
-in the file). They were generated from the lists in
-`provided/canonical_trial_lists/`. Some builds may be broken and some may
-not; do not assume a count in either direction.
+**Q1 PASS, Q2 PASS.** All 104 input rows match participant 3 in order. Scoring
+is the problem: both `accuracy` and `key_resp.corr` are zero on every trial,
+although 97 responses match the required odd-participant key mapping. The
+correct-answer setting may have compared physical keys with the category names
+`word` and `nonword`. Reading the stored accuracy would give 0/104 correct
+instead of 97/104 and could lead a researcher to exclude the run.
 
-For each file, answer three things. Two or three sentences each.
+### File B, participant 4
 
-### file_A
+**Q1 PASS, Q2 PASS.** All 104 rows match participant 4 in order. The recorded
+primes and uppercase targets agree with the list, the two measured SOAs match
+their labels, the keyboard starts with the target, and recalculating the
+even-participant key mapping reproduces the 100 correct trials. A sequential
+loop and target-triggered keyboard are consistent with these records. A
+researcher would get the same trial assignments and accuracy when analyzing
+the recorded fields; the file does not establish what the instructions said.
 
-- Verdicts (paste your checker's output, or summarize it):
-- What the person who built it most likely did in Builder:
-- What a researcher analyzing this file, without your checker, would have
-  concluded:
+### File C, participant 7
 
-### file_B
+**Q1 FAIL, Q2 FAIL against the required participant-7 list.** Both participant
+columns say 7. Dropping that ID for comparison, all 104 rows match participant
+1's canonical list in its original order. The first practice item is PW4
+instead of the expected PW3. A loop fixed to the participant-1 conditions file
+would explain the evidence. There is no evidence of a separate shuffle. An
+analyst using the participant ID to join the planned design would assign the
+wrong item or condition and count participant 7's counterbalancing list as
+delivered.
 
-- Verdicts:
-- What the person who built it most likely did in Builder:
-- What a researcher analyzing this file would have concluded:
+### File D, participant 2
 
-### file_C
+**Q1 PASS, Q2 PASS.** The input columns match all 104 intended trials in order,
+but `prime_shown` says `prime` on every trial, including the first trial, whose
+input prime is `gravel`. Entering the literal word in the prime Text field
+instead of binding it to the list variable would produce that pattern. If the
+shown-text field accurately reflects the stimulus object, a researcher relying
+on the planned prime or relatedness column would analyze a priming manipulation
+the build never presented. The CSV alone cannot rule out an error in the
+shown-text logging itself.
 
-- Verdicts:
-- What the person who built it most likely did in Builder:
-- What a researcher analyzing this file would have concluded:
+### File E, participant 5
 
-### file_D
+**Q1 PASS, Q2 FAIL.** All 104 participant-5 rows occur exactly once, but 103 are
+in a different position. The first two practice indices are 2 and 3. A random
+loop within each phase would preserve counts while changing order. The longest
+experimental run of one response category is five trials. A researcher checking
+only cell counts would miss the violation of the planned maximum of three.
 
-- Verdicts:
-- What the person who built it most likely did in Builder:
-- What a researcher analyzing this file would have concluded:
+### File F, participant 8
 
-### file_E
+**Q1 PASS, Q2 PASS.** All 104 participant-8 rows match in order. On every trial
+the keyboard starts at fixation, 650 ms before the short-SOA target and 1500 ms
+before the long-SOA target. On all 50 timeouts the keyboard closes 2000 ms after
+it opens, and all 50 occur on the long SOA. Starting its clock and response
+window at the beginning of the trial explains both the inflated RTs and the
+500 ms left to respond after a long-SOA target. The apparent long-SOA slowing
+and timeout excess would mix response-window settings with participant behavior.
 
-- Verdicts:
-- What the person who built it most likely did in Builder:
-- What a researcher analyzing this file would have concluded:
+## Assessment of the first checker
 
-### file_F
-
-- Verdicts:
-- What the person who built it most likely did in Builder:
-- What a researcher analyzing this file would have concluded:
+The independent list comparisons reproduced all six first verdict pairs for
+Q1 and Q2. For A, B, D and F, a foreign input row would have failed Q1 and a
+swapped or repeated trial would have failed Q2. Neither occurred. C failed both
+comparisons because the recorded sequence was from another participant's list.
+E passed the membership comparison and failed the order comparison. The other
+faults observed in A, D and F concern properties outside this assignment's
+checker scope. No Q1 or Q2 verdict required correction.
 
 ## Your first checker on the six files
 

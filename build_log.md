@@ -2,14 +2,22 @@
 
 ## Trial lists
 
-Which trial lists are in `trial_lists/`: your A2 generator's output, or the
-canonical set from `provided/`? If canonical, say why.
+The eight CSVs in `trial_lists/` came from the submitted Assignment 2 output for
+participants 1 through 8 at seed 8683. Commit `9d5b9e8` contains these inputs
+and the original starter files. The supplied cases use the separate lists in
+`provided/canonical_trial_lists/`.
 
 ## How the build happened
 
-A short account, in order. What you built by hand in Builder, what you
-changed after piloting, and what (if anything) you handed to a language
-model. Point to commits by their short hash.
+- `b0a73de` records the initial Builder instructions screen and its SPACE
+  response, before the practice and main loops were added.
+- `7bdb1c6` records the Q1 and Q2 checker and its first results on the six
+  supplied files. Before running it on those files, temporary examples tested
+  an intact list, a wrong participant, changed input text, a partial record,
+  swapped, missing and extra trials, and a duplicate replacing another trial.
+- After preserving those results, the six files were examined for the likely
+  Builder settings and their consequences. The evidence is in
+  `verification_report.md`.
 
 ## Handoff (only if you used a language model on the experiment file)
 
