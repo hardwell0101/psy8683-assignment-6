@@ -63,11 +63,33 @@ For each file, answer three things. Two or three sentences each.
 
 ## Your first checker on the six files
 
-Run your first working checker on the six files before you look at them by
-hand, and commit that output (paste it here too). Then:
+Command: `python3 check_output.py provided/output_files/file_*.csv --lists provided/canonical_trial_lists`
 
-- If it got a verdict wrong, in either direction, say which, what your check
-  was actually testing, and what you changed. The fix belongs in its own
-  commit.
-- If it got all six right, say for each file which of your checks could have
-  failed on it, and whether it did.
+First output, recorded before manual inspection of any supplied file:
+
+```text
+provided/output_files/file_A.csv
+  Q1 PASS  All 104 recorded trials match rows of trials_p03.csv on all ten input fields.
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 PASS  104/104 trial identities from trials_p03.csv in exact file order (phase, trial_index, item_id).
+provided/output_files/file_B.csv
+  Q1 PASS  All 104 recorded trials match rows of trials_p04.csv on all ten input fields.
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 PASS  104/104 trial identities from trials_p04.csv in exact file order (phase, trial_index, item_id).
+provided/output_files/file_C.csv
+  Q1 FAIL  trials_p07.csv: 104 unmatched trial records; line 3: ('practice', '1', 'PW4') does not match all input fields
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 FAIL  trials_p07.csv: 104 recorded, 104 expected; 104 missing, 104 excess. First difference at trial 1: expected ('practice', '1', 'PW3'), observed ('practice', '1', 'PW4').
+provided/output_files/file_D.csv
+  Q1 PASS  All 104 recorded trials match rows of trials_p02.csv on all ten input fields.
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 PASS  104/104 trial identities from trials_p02.csv in exact file order (phase, trial_index, item_id).
+provided/output_files/file_E.csv
+  Q1 PASS  All 104 recorded trials match rows of trials_p05.csv on all ten input fields.
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 FAIL  trials_p05.csv: 104 recorded, 104 expected; 0 missing, 0 excess. First difference at trial 1: expected ('practice', '1', 'PN2'), observed ('practice', '2', 'PW2').
+provided/output_files/file_F.csv
+  Q1 PASS  All 104 recorded trials match rows of trials_p08.csv on all ten input fields.
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 PASS  104/104 trial identities from trials_p08.csv in exact file order (phase, trial_index, item_id).
+```
