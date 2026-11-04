@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+*_lastrun.py
+.DS_Store
