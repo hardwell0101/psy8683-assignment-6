@@ -1,4 +1,4 @@
-# Build log (Part B) and AI-use note (Part F)
+# Build log (Part B) and AI-use note (Part E)
 
 ## Trial lists
 
@@ -19,20 +19,24 @@ and the original starter files. The supplied cases use the separate lists in
   Builder settings and their consequences. The evidence is in
   `verification_report.md`.
 
-## Handoff (only if you used a language model on the experiment file)
+## Changes after the handoff
 
 - Hash of the `pre-handoff:` commit: `debbc92`. The draft ran in Pilot mode as participant 1. All 104 rows matched the participant 1 list in order.
 - Hash of the first commit after the handoff: `d54b2ff`.
 - Scope: extend the working Builder draft to meet Q1 through Q10.
 
-List each change the model made in your own words, and for each say whether you kept
-it, changed it, or reverted it, and why. A change you cannot explain is a
-change you cannot keep.
+The baseline and the revised Builder file can be compared with `git diff debbc92 d54b2ff -- ldt.psyexp`.
 
-| Change | Kept / changed / reverted | Why |
+| Change from the pilot | Decision | Reason |
 | --- | --- | --- |
-| | | |
+| Replace the fixed participant 1 filename in both loops with a filename built from the startup number. | Kept | Entering 6 must select `trials_p06.csv`. The same two sequential loops still take the first 8 rows and then the remaining 96. |
+| Set the word and nonword keys from the participant number and show them in the opening instructions. | Kept | Participant 3 uses F for words. Participant 6 uses J. The instructions and scoring need to agree. |
+| Convert fixation, prime, target onset and the response limit to frame counts using the measured refresh rate. | Kept | A 150 ms interval needs 18 frames on a 120 Hz screen but only 9 at 60 Hz. Measuring the rate avoids using the windowed pilot's frame count in a full-screen run. |
+| Add practice feedback, a break that waits for Space, a blank interval after each trial and a timed end screen. | Kept | Practice gives the participant one second to see the outcome. The main block omits feedback and still gives half a second between trials. |
+| Score the first valid target-period key against the assigned mapping. Check the last frame for an in-time key before recording a timeout. | Kept | If there is no response within two seconds, key and RT stay empty. Accuracy is zero for both an incorrect press and a timeout, so the separate timeout flag distinguishes them. |
+| Save the prime and target from the text objects, and save their Builder flip timestamps. | Kept | These fields show what the program drew and when. The input columns alone describe only what was planned. |
 
+The first participant 6 attempt was rejected. An older Builder draft ran with 6 in the dialog but still loaded participant 1's trials. The replacement used `ldt.py` compiled from the verified final `ldt.psyexp`. The recorded trials then passed both list checks. Commit `aba0d9e` contains the participant 3 run and `de91402` contains the accepted participant 6 run and the compiled script.
 
 ## Final settings
 
@@ -46,10 +50,6 @@ change you cannot keep.
 
 The revised file reopened in Builder and compiled. A separate shortened desktop pilot used scripted responses on three practice and three main trials from participant 2. It exercised both SOAs and all three scoring outcomes. The recorded onsets, text, practice feedback durations, timeout durations, and inter-trial intervals matched the expected values. This diagnostic was separate from the participant runs.
 
-## AI-use note (Part F)
+## AI-use note (Part E)
 
-Write this the way you would write a methods paragraph: which parts of the
-experiment, the checker, and the written parts were model-generated, what
-you asked for, what you had to correct, and anything you rejected. Model use
-is expected in this course; an absent or contentless note is what costs
-points.
+I used Codex for Builder guidance while I made the initial instructions, trial routine, and practice and main loops. I supplied the participant 3 predictions before the first complete run and made the keyboard responses in the submitted sessions. After the participant 1 pilot was committed, I used Codex to extend the Builder file to Q1–Q10. Codex wrote the Q1–Q2 checker, ran it on the supplied and recorded files, and drafted the change table, verification report, and reconciliation from the output. During piloting, the keyboard driver had to be repaired and a run labeled `pilot` was repeated with participant ID 1. The first participant 6 attempt used the wrong list and was excluded. The six-trial scripted diagnostic checked the revised build separately from the submitted participant data.

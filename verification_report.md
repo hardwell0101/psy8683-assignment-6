@@ -2,14 +2,27 @@
 
 ## Own runs
 
-Participant 3 ran in desktop Run mode. The root Builder file was reopened and compiled. Its loader formats the startup participant number as two digits and constructs a relative path inside `trial_lists/`. The CSV records participant 3 and the 104 trials match its source in order.
+Both submitted final CSVs contain 107 data rows. There are 8 practice and 96 experimental trials, plus the instructions, break and end-screen rows. The `piloting` flag is false for both runs. Participant 1's Pilot-mode output is preserved separately in the pre-handoff commit.
+
+**Q1 PILOT.** Both runs used the desktop startup dialog. The root Builder file was reopened, and the compiled script was checked for the relative filename expression that pads the number to two digits. An earlier run labeled 6 illustrates why this check matters: the older draft loaded participant 1's file, and all 104 trials matched participant 1 when the dialog ID was excluded from the comparison. That run was set aside. The replacement script uses the participant-dependent path in both loops. The accepted CSVs agree with participants 3 and 6 on every input field and row position.
 
 ```text
 data/3_ldt_2026-11-04_12h44.45.576.csv
   Q1 PASS  All 104 recorded trials match rows of trials_p03.csv on all ten input fields.
   Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
   Q2 PASS  104/104 trial identities from trials_p03.csv in exact file order (phase, trial_index, item_id).
+data/6_ldt_2026-11-04_12h59.17.668.csv
+  Q1 PASS  All 104 recorded trials match rows of trials_p06.csv on all ten input fields.
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 PASS  104/104 trial identities from trials_p06.csv in exact file order (phase, trial_index, item_id).
 ```
+
+**Timing and scoring observations.** The full-screen runs measured 120.042 Hz (participant 3) and 119.657 Hz (participant 6). Both round to 120 Hz. In each run the timestamps show 52 short prime-to-target intervals of 18 frames and 52 long intervals of 120 frames, rounded to the nearest frame. The prime lasted 18 frames, practice feedback lasted 120, and the blank between trials lasted 60. The saved target onset matched the keyboard start time on every trial. Scoring the recorded keys independently with the assigned mapping reproduced every accuracy flag.
+
+| Participant | Word / nonword keys | Correct | Incorrect key | Timeout | Median RT for responses |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 3 | F / J | 48 | 55 | 1 | 267 ms |
+| 6 | J / F | 16 | 88 | 0 | 632 ms |
 
 ## Six supplied runs
 
