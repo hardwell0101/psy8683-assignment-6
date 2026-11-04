@@ -9,7 +9,7 @@
         <Param name="Incomplete URL" val="" valType="str" updates="None" plugin="None"/>
         <Param name="End Message" val="Thank you for your patience." valType="str" updates="None" plugin="None"/>
         <Param name="Resources" val="[]" valType="list" updates="None" plugin="None"/>
-        <Param name="runMode" val="0" valType="code" updates="None" plugin="None"/>
+        <Param name="runMode" val="1" valType="code" updates="None" plugin="None"/>
         <Param name="Use version" val="" valType="str" updates="None" plugin="None"/>
         <Param name="Enable Escape" val="True" valType="bool" updates="None" plugin="None"/>
         <Param name="rush" val="False" valType="bool" updates="None" plugin="None"/>
@@ -69,9 +69,21 @@
                 <Param name="desc" val="" valType="str" updates="constant" plugin="None"/>
             </RoutineSettingsComponent>
             <CodeComponent name="trialTiming" plugin="None">
-                <Param name="name" valType="code" updates="constant" plugin="None" val="trialTiming"/>
-                <Param name="Code Type" valType="str" updates="constant" plugin="None" val="Py"/>
-                <Param name="Begin Routine" valType="extendedCode" updates="constant" plugin="None" val="targetFrame = fixFrames + round(soa * refreshHz / 1000)"/>
+                <Param name="name" val="trialTiming" valType="code" updates="constant" plugin="None"/>
+                <Param name="Code Type" val="Py" valType="str" updates="constant" plugin="None"/>
+                <Param name="disabled" val="False" valType="bool" updates="None" plugin="None"/>
+                <Param name="Before Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin Routine" val="targetFrame = fixFrames + round(soa * refreshHz / 1000)" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Each Frame" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Before JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin JS Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Each JS Frame" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End JS Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
             </CodeComponent>
             <TextComponent name="fixation" plugin="None">
                 <Param name="name" val="fixation" valType="code" updates="None" plugin="None"/>
@@ -174,9 +186,21 @@
                 <Param name="discard previous" val="True" valType="bool" updates="constant" plugin="None"/>
             </KeyboardComponent>
             <CodeComponent name="scoreTrial" plugin="None">
-                <Param name="name" valType="code" updates="constant" plugin="None" val="scoreTrial"/>
-                <Param name="Code Type" valType="str" updates="constant" plugin="None" val="Py"/>
-                <Param name="End Routine" valType="extendedCode" updates="constant" plugin="None" val="pressed = decision.keys in ('f', 'j') and 0 &lt;= decision.rt &lt;= 2.0&#10;if not pressed:&#10;    # Include a key queued during the last target frame, before the deadline.&#10;    lastKeys = decision.getKeys(keyList=['f', 'j'], waitRelease=False)&#10;    for lastKey in lastKeys:&#10;        if 0 &lt;= lastKey.rt &lt;= 2.0:&#10;            decision.keys, decision.rt = lastKey.name, lastKey.rt&#10;            pressed = True&#10;            break&#10;expectedKey = wordKey if correct_response == 'word' else nonwordKey&#10;isCorrect = int(pressed and decision.keys == expectedKey)&#10;feedbackMessage = ('Correct' if isCorrect else 'Incorrect') if pressed else 'Too slow'&#10;thisExp.addData('key', decision.keys if pressed else '')&#10;thisExp.addData('rt', decision.rt if pressed else '')&#10;thisExp.addData('accuracy', isCorrect)&#10;thisExp.addData('timeout', int(not pressed))&#10;thisExp.addData('prime_shown', prime_text.text)&#10;thisExp.addData('target_shown', target_text.text)&#10;thisExp.addData('prime_onset', thisExp.thisEntry['prime_text.started'])&#10;thisExp.addData('target_onset', thisExp.thisEntry['target_text.started'])"/>
+                <Param name="name" val="scoreTrial" valType="code" updates="constant" plugin="None"/>
+                <Param name="Code Type" val="Py" valType="str" updates="constant" plugin="None"/>
+                <Param name="disabled" val="False" valType="bool" updates="None" plugin="None"/>
+                <Param name="Before Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Each Frame" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End Routine" val="pressed = decision.keys in ('f', 'j') and 0 &lt;= decision.rt &lt;= 2.0&#10;if not pressed:&#10;    # Include a key queued during the last target frame, before the deadline.&#10;    lastKeys = decision.getKeys(keyList=['f', 'j'], waitRelease=False)&#10;    for lastKey in lastKeys:&#10;        if 0 &lt;= lastKey.rt &lt;= 2.0:&#10;            decision.keys, decision.rt = lastKey.name, lastKey.rt&#10;            pressed = True&#10;            break&#10;expectedKey = wordKey if correct_response == 'word' else nonwordKey&#10;isCorrect = int(pressed and decision.keys == expectedKey)&#10;feedbackMessage = ('Correct' if isCorrect else 'Incorrect') if pressed else 'Too slow'&#10;thisExp.addData('key', decision.keys if pressed else '')&#10;thisExp.addData('rt', decision.rt if pressed else '')&#10;thisExp.addData('accuracy', isCorrect)&#10;thisExp.addData('timeout', int(not pressed))&#10;thisExp.addData('prime_shown', prime_text.text)&#10;thisExp.addData('target_shown', target_text.text)&#10;thisExp.addData('prime_onset', thisExp.thisEntry['prime_text.started'])&#10;thisExp.addData('target_onset', thisExp.thisEntry['target_text.started'])" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Before JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin JS Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Each JS Frame" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End JS Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
             </CodeComponent>
         </Routine>
         <Routine name="instructions">
@@ -197,9 +221,21 @@
                 <Param name="desc" val="" valType="str" updates="constant" plugin="None"/>
             </RoutineSettingsComponent>
             <CodeComponent name="setupTask" plugin="None">
-                <Param name="name" valType="code" updates="constant" plugin="None" val="setupTask"/>
-                <Param name="Code Type" valType="str" updates="constant" plugin="None" val="Py"/>
-                <Param name="Begin Routine" valType="extendedCode" updates="constant" plugin="None" val="participantNumber = int(expInfo['participant'])&#10;listPath = f'trial_lists/trials_p{participantNumber:02d}.csv'&#10;wordKey, nonwordKey = ('f', 'j') if participantNumber % 2 else ('j', 'f')&#10;if not expInfo.get('frameRate'):&#10;    raise RuntimeError('Refresh rate could not be measured. Restart on a display with a stable refresh rate.')&#10;refreshHz = round(expInfo['frameRate'])&#10;fixFrames = round(0.5 * refreshHz)&#10;primeFrames = round(0.15 * refreshHz)&#10;responseFrames = round(2 * refreshHz)"/>
+                <Param name="name" val="setupTask" valType="code" updates="constant" plugin="None"/>
+                <Param name="Code Type" val="Py" valType="str" updates="constant" plugin="None"/>
+                <Param name="disabled" val="False" valType="bool" updates="None" plugin="None"/>
+                <Param name="Before Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin Routine" val="participantNumber = int(expInfo['participant'])&#10;listPath = f'trial_lists/trials_p{participantNumber:02d}.csv'&#10;wordKey, nonwordKey = ('f', 'j') if participantNumber % 2 else ('j', 'f')&#10;if not expInfo.get('frameRate'):&#10;    raise RuntimeError('Refresh rate could not be measured. Restart on a display with a stable refresh rate.')&#10;refreshHz = round(expInfo['frameRate'])&#10;fixFrames = round(0.5 * refreshHz)&#10;primeFrames = round(0.15 * refreshHz)&#10;responseFrames = round(2 * refreshHz)" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Each Frame" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Before JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Begin JS Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="Each JS Frame" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End JS Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
             </CodeComponent>
             <TextComponent name="instructionText" plugin="None">
                 <Param name="name" val="instructionText" valType="code" updates="None" plugin="None"/>
