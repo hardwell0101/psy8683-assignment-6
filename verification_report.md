@@ -2,8 +2,14 @@
 
 ## Own runs
 
-The participant 3 and 6 Run-mode files are pending. Their checker output and
-observations will go here after data collection.
+Participant 3 ran in desktop Run mode. The root Builder file was reopened and compiled. Its loader formats the startup participant number as two digits and constructs a relative path inside `trial_lists/`. The CSV records participant 3 and the 104 trials match its source in order.
+
+```text
+data/3_ldt_2026-11-04_12h44.45.576.csv
+  Q1 PASS  All 104 recorded trials match rows of trials_p03.csv on all ten input fields.
+  Q1 PILOT Observe the startup entry and confirm the root ldt.psyexp loads the relative two-digit filename. A CSV cannot prove the typed value, file location, or loader implementation.
+  Q2 PASS  104/104 trial identities from trials_p03.csv in exact file order (phase, trial_index, item_id).
+```
 
 ## Six supplied runs
 

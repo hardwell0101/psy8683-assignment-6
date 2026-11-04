@@ -40,7 +40,7 @@ change you cannot keep.
 | --- | --- |
 | Trial lists and order | The startup number selects the two-digit relative filename. Sequential loops use rows 0:8 and 8:104, once each. |
 | Response mapping | Odd participant numbers use F for word and J for nonword. Even numbers reverse the mapping. The instructions display the assigned keys. |
-| Timing | At the measured refresh rate rounded to 60 Hz, fixation and the blank interval each last 30 frames, the prime 9, practice feedback 60, and the response limit and end screen 120. Target onset follows prime onset by 9 or 60 frames. Counts are recalculated at startup. |
+| Timing | In the 60 Hz windowed pilot, fixation and the blank interval each last 30 frames, the prime 9, practice feedback 60, and the response limit and end screen 120. Target onset follows prime onset by 9 or 60 frames. The full-screen participant 3 run measured 120.042 Hz and used 60, 18, 120 and 240 frames respectively. Its short and long SOAs spanned 18 and 120 frames. |
 | Response and scoring | The keyboard clears earlier presses and resets its clock on the target flip. The first valid F or J determines accuracy. A timeout gives accuracy 0 with empty key and RT. |
 | Display and onset columns | The text columns read the stimulus objects. The onset columns copy the flip timestamps Builder recorded for those same objects. |
 

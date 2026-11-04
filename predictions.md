@@ -39,16 +39,12 @@ Answer for your own build, as participant 3.
 
 ## Reconciliation
 
-For each prediction: what you got, and if it differs, why. "I was wrong" is
-not a reason. Name the mechanism: what PsychoPy, your build, or your machine
-did that you did not expect.
+1. The CSV has 107 data rows. The predicted 104 trials were present. Builder also wrote one row each for the instructions, break, and end screen. Practice feedback and the blank interval stayed on the trial row inside each loop iteration.
 
-1.
+2. Only `participant` appears twice. Both cells read `3` on every trial. Builder includes the trial-parameter name and then appends the experiment-info names to the header. PsychoPy merges the dialog values into each row and writes both cells by looking up the same key. The two cells therefore cannot independently establish which list ran. Matching all ten fields against the source list provides that check.
 
-2.
+3. Full-screen Run mode measured 120.042 Hz, rounded to 120 Hz. Across 52 trials in each condition, the median onset differences were 150.13 ms and 1000.00 ms. All short gaps rounded to 18 frames and all long gaps to 120. The millisecond predictions held. The frame counts doubled because the prediction assumed 60 Hz.
 
-3.
+4. The median across 103 recorded responses was 267 ms, 383 ms faster than the predicted 650 ms. The timeout rate was 1/104 (0.96%), close to the predicted 1%. The target disappeared on the first valid keypress. The session felt fast and involved frequent guesses. On 34 trials the key arrived within 150 ms of target onset, consistent with that account.
 
-4.
-
-5.
+5. Participant 3's list contains no `smoke` and `pepper` pair, so this run cannot verify that exact pair. On main trial 61 the list paired `salt` with `pepper`; the recorded stimulus values were `salt` and `PEPPER`. On all 104 trials, the saved prime matched the lowercase list entry and the saved target matched the uppercase text drawn by the target component.
