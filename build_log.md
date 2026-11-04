@@ -21,9 +21,9 @@ and the original starter files. The supplied cases use the separate lists in
 
 ## Handoff (only if you used a language model on the experiment file)
 
-- Hash of the `pre-handoff:` commit:
-- Hash of the first commit after the handoff:
-- What you asked for:
+- Hash of the `pre-handoff:` commit: `debbc92`. The draft ran in Pilot mode as participant 1. All 104 rows matched the participant 1 list in order.
+- Hash of the first commit after the handoff: `d54b2ff`.
+- Scope: extend the working Builder draft to meet Q1 through Q10.
 
 List each change the model made in your own words, and for each say whether you kept
 it, changed it, or reverted it, and why. A change you cannot explain is a
@@ -33,6 +33,18 @@ change you cannot keep.
 | --- | --- | --- |
 | | | |
 
+
+## Final settings
+
+| Setting | Builder implementation |
+| --- | --- |
+| Trial lists and order | The startup number selects the two-digit relative filename. Sequential loops use rows 0:8 and 8:104, once each. |
+| Response mapping | Odd participant numbers use F for word and J for nonword. Even numbers reverse the mapping. The instructions display the assigned keys. |
+| Timing | At the measured refresh rate rounded to 60 Hz, fixation and the blank interval each last 30 frames, the prime 9, practice feedback 60, and the response limit and end screen 120. Target onset follows prime onset by 9 or 60 frames. Counts are recalculated at startup. |
+| Response and scoring | The keyboard clears earlier presses and resets its clock on the target flip. The first valid F or J determines accuracy. A timeout gives accuracy 0 with empty key and RT. |
+| Display and onset columns | The text columns read the stimulus objects. The onset columns copy the flip timestamps Builder recorded for those same objects. |
+
+The revised file reopened in Builder and compiled. A separate shortened desktop pilot used scripted responses on three practice and three main trials from participant 2. It exercised both SOAs and all three scoring outcomes. The recorded onsets, text, practice feedback durations, timeout durations, and inter-trial intervals matched the expected values. This diagnostic was separate from the participant runs.
 
 ## AI-use note (Part F)
 
