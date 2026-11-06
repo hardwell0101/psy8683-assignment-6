@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2026.2.2),
-    on Wed Nov  4 12:58:30 2026
+    on Thu Nov  5 20:57:02 2026
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -377,6 +377,10 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     # Start Code - component code to be run after the window creation
     
     # --- Initialize components for Routine "instructions" ---
+    # Run 'Begin Experiment' code from setupTask
+    win.recordFrameIntervals = False
+    win.frameIntervals.clear()
+    win.refreshThreshold = 1.5 * frameDur
     instructionText = visual.TextStim(win=win, name='instructionText',
         text='',
         font='Arial',
@@ -716,6 +720,9 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         # update component parameters for each repeat
         # Run 'Begin Routine' code from trialTiming
         targetFrame = fixFrames + round(soa * refreshHz / 1000)
+        firstInterval = len(win.frameIntervals)
+        dropsAtStart = win.nDroppedFrames
+        win.recordFrameIntervals = True
         prime_text.setText(prime)
         target_text.setText(target.upper())
         # create starting attributes for decision
@@ -938,6 +945,11 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         trial.tStop = globalClock.getTime(format='float')
         trial.tStopRefresh = tThisFlipGlobal
         thisExp.addData('trial.stopped', trial.tStop)
+        # Run 'End Routine' code from trialTiming
+        win.recordFrameIntervals = False
+        thisExp.addData('dropped_frames', win.nDroppedFrames - dropsAtStart)
+        thisExp.addData('recorded_intervals', len(win.frameIntervals) - firstInterval)
+        thisExp.addData('trial_last_flip', float(win.lastFrameT))
         # check responses
         if decision.keys in ['', [], None]:  # No response was made
             decision.keys = None
@@ -1428,6 +1440,9 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         # update component parameters for each repeat
         # Run 'Begin Routine' code from trialTiming
         targetFrame = fixFrames + round(soa * refreshHz / 1000)
+        firstInterval = len(win.frameIntervals)
+        dropsAtStart = win.nDroppedFrames
+        win.recordFrameIntervals = True
         prime_text.setText(prime)
         target_text.setText(target.upper())
         # create starting attributes for decision
@@ -1650,6 +1665,11 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         trial.tStop = globalClock.getTime(format='float')
         trial.tStopRefresh = tThisFlipGlobal
         thisExp.addData('trial.stopped', trial.tStop)
+        # Run 'End Routine' code from trialTiming
+        win.recordFrameIntervals = False
+        thisExp.addData('dropped_frames', win.nDroppedFrames - dropsAtStart)
+        thisExp.addData('recorded_intervals', len(win.frameIntervals) - firstInterval)
+        thisExp.addData('trial_last_flip', float(win.lastFrameT))
         # check responses
         if decision.keys in ['', [], None]:  # No response was made
             decision.keys = None
@@ -1941,6 +1961,8 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     thisExp.nextEntry()
     # the Routine "endScreen" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
+    # Run 'End Experiment' code from setupTask
+    win.saveFrameIntervals(fileName=thisExp.dataFileName + '_frameIntervals.log')
     
     # mark experiment as finished
     endExperiment(thisExp, win=win)
