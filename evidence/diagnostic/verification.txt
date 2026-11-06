@@ -1,0 +1,9 @@
+2.6131 	WARNING 	t of last frame was 75.17ms (=1/13)
+9.2774 	WARNING 	t of last frame was 14.39ms (=1/69)
+practice 1 intervals 102 drops 0 span error (s) 0.0
+practice 2 intervals 204 drops 1 span error (s) 0.0
+practice 3 intervals 419 drops 1 span error (s) 0.0
+experimental 1 intervals 205 drops 0 span error (s) 0.0
+experimental 2 intervals 102 drops 0 span error (s) 0.0
+experimental 3 intervals 317 drops 0 span error (s) 0.0
+PASS six real trial windows, including the deliberately delayed second trial

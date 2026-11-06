@@ -1,0 +1,17 @@
+[
+  {
+    "sha256": [
+      "ceb2ccf832cd8cc092f6cbac36a6a79af4261e55615b12806954603748800c36",
+      "17bf76ef933ec782bcab8a9b1995a19879f30f401e1429017c30fdee313fc7b5"
+    ],
+    "settled": {
+      "Q1": "Inspected the participant dialog, two-digit listPath, sequential loops and relative file in the corresponding Builder source. Q1 file evidence separately checks the typed ID against the actual list.",
+      "Q3": "Inspected instructions, feedbackText, and Flow: the instructions interpolate the assigned keys, beginKey and resumeKey accept Space, and practice feedbackMessage branches on accuracy and timeout before the ITI.",
+      "Q4": "Inspected fixation.text (+), prime and target frame starts, the empty background during the long-SOA gap, and blankScreen during the ITI. The next feedback or interval flip removes a response-ended target.",
+      "Q5": "Inspected the measured expInfo frameRate rounding, frame-count starts/stops, and targetFrame = fixFrames + round(soa * refreshHz / 1000) in the corresponding source.",
+      "Q6": "Inspected odd/even wordKey and nonwordKey, instruction interpolation, the decision F/J allowlist, and global Escape handling in the compiled loops.",
+      "Q7": "Inspected the compiled loops: clock reset and buffer clearing on the first target flip, subsequent polling, and storage of the first allowed key. Physical device latency remains outside software evidence.",
+      "Q8": "Inspected scoreTrial End Routine: prime_shown and target_shown read prime_text.text and target_text.text, after the trial."
+    }
+  }
+]

@@ -1,11 +1,12 @@
-"""Compare recorded trial-list identity (Q1) and sequence (Q2) with the input.
+"""Check lexical-decision output against Q1-Q10 and the frame log against I1-I2.
 
 python check_output.py data/3_ldt_*.csv --participant 3
 python check_output.py provided/output_files/*.csv --lists provided/canonical_trial_lists
 
 --participant supplies an independently known run ID when one is available.
 For anonymized files the recorded participant fields are the only ID evidence.
-Q3-Q10 are reserved for Assignment 6.
+Q3-Q10 and I1-I2 report each observable part separately. Use --require-log
+for new instrumented runs, and --build to include a documented build inspection.
 """
 from __future__ import annotations
 
@@ -162,65 +163,43 @@ def check_q2(output, lists_dir):
         return "FAIL", str(e)
 
 
-def check_q3(output, lists_dir):
-    """Sequence of events."""
-    raise NotImplementedError
-
-
-def check_q4(output, lists_dir):
-    """One trial: durations and the prime-to-target interval."""
-    raise NotImplementedError
-
-
-def check_q5(output, lists_dir):
-    """Durations in whole frames at the measured rate."""
-    raise NotImplementedError
-
-
-def check_q6(output, lists_dir):
-    """Keys and the participant's mapping."""
-    raise NotImplementedError
-
-
-def check_q7(output, lists_dir):
-    """rt is measured from target onset."""
-    raise NotImplementedError
-
-
-def check_q8(output, lists_dir):
-    """prime_shown and target_shown are what was on the screen."""
-    raise NotImplementedError
-
-
-def check_q9(output, lists_dir):
-    """prime_onset and target_onset."""
-    raise NotImplementedError
-
-
-def check_q10(output, lists_dir):
-    """key, rt, accuracy, timeout, and the ten trial-list columns."""
-    raise NotImplementedError
-
-
 def main():
+    from a6_checks import inspect_file, Missing
+    import hashlib
+    import json
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("files", nargs="+")
     parser.add_argument("--lists", default="trial_lists")
     parser.add_argument("--participant", type=int, help="independently known run ID")
+    parser.add_argument("--require-log", action="store_true", help="I1 and I2 are required for this run")
+    parser.add_argument("--build", type=Path, help="known source for these files, to attach its manual inspection")
     args = parser.parse_args()
+    review = {}
+    if args.build:
+        digest = hashlib.sha256(args.build.read_bytes()).hexdigest()
+        reviews = json.loads((Path(__file__).parent/"evidence"/"build_inspections.json").read_text())
+        review = next((r["settled"] for r in reviews if digest in r["sha256"]), {})
     failed = False
     for path in args.files:
         print(path)
         try:
             output = read_output(path)
             output.known_participant = args.participant
-            results = [check_q1(output, args.lists), [check_q2(output, args.lists)]]
-        except (ValueError, OSError, csv.Error) as e:
-            results = [[("FAIL", str(e)), Q1_PILOT], [("FAIL", str(e))]]
-        for number, parts in enumerate(results, 1):
-            for verdict, evidence in parts:
-                print(f"  Q{number} {verdict:5} {evidence}")
-                failed |= verdict == "FAIL"
+            q1 = check_q1(output, args.lists)[0]
+            findings = inspect_file(output, path, q1, args.require_log)
+            results = [("Q1", *q1), ("Q2", *check_q2(output, args.lists))]
+            for prop, verdict, evidence in findings.lines():
+                if verdict == "UNDETERMINED" and evidence.startswith("further evidence") and prop in review:
+                    verdict, evidence = "PILOT", review[prop]
+                results.append((prop, verdict, evidence))
+        except (ValueError, OSError, csv.Error, Missing) as error:
+            results = [(prop, "FAIL" if prop == "Q1" else "UNDETERMINED",
+                        f"cannot read complete trial records: {error}")
+                       for prop in [*(f"Q{i}" for i in range(1,11)), "I1", "I2"]]
+        for prop, verdict, evidence in results:
+            print(f"  {prop} {verdict} {evidence}")
+            failed |= verdict == "FAIL"
     return int(failed)
 
 
