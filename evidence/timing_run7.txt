@@ -1,0 +1,9 @@
+data/7_ldt_2026-11-06_12h38.39.674.csv
+rounded rate = 120 Hz; 104 trials; 21199 intervals; 0 drops; longest = 9.4687 ms
+fixation: expected 60; achieved frames x frequency {60: 104}
+prime: expected 18; achieved frames x frequency {18: 104}
+SOA 150: expected 18; achieved frames x frequency {18: 52}
+ITI: expected 60; achieved frames x frequency {60: 104}
+feedback: expected 120; achieved frames x frequency {120: 8}
+SOA 1000: expected 120; achieved frames x frequency {120: 52}
+end screen: expected 240; achieved frames x frequency {240: 1}
