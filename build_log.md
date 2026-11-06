@@ -53,3 +53,13 @@ The revised file reopened in Builder and compiled. A separate shortened desktop 
 ## AI-use note (Part E)
 
 I used Codex for Builder guidance while I made the initial instructions, trial routine, and practice and main loops. I supplied the participant 3 predictions before the first complete run and made the keyboard responses in the submitted sessions. After the participant 1 pilot was committed, I used Codex to extend the Builder file to Q1–Q10. Codex wrote the Q1–Q2 checker, ran it on the supplied and recorded files, and drafted the change table, verification report, and reconciliation from the output. During piloting, the keyboard driver had to be repaired and a run labeled `pilot` was repeated with participant ID 1. The first participant 6 attempt used the wrong list and was excluded. The six-trial scripted diagnostic checked the revised build separately from the submitted participant data.
+
+## Assignment 6
+
+Commit `928db57` is the A5 baseline with the three A6 templates. The
+experiment and runs 3 and 6 at this checkpoint are the original A5 evidence.
+Ibra supplied the predictions in chat using the written A5 findings and the
+Mac's reported display setting. Codex calculated the frame counts and mapped
+Ibra's rule and three exceptions to the table. Commit `a9fbe92` freezes the
+answers before the first new output check. This handoff preserves the same
+Builder file and compiled script before Codex adds frame recording.
