@@ -18,7 +18,10 @@ from unittest.mock import patch
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path, help="new or empty diagnostic directory")
-    dest = parser.parse_args().output.resolve()
+    parser.add_argument("--last-frame", action="store_true",
+                        help="offer one 1.999 s key in each block")
+    args = parser.parse_args()
+    dest = args.output.resolve()
     dest.mkdir(parents=True, exist_ok=True)
     if any(dest.glob("*.csv")):
         parser.error("Choose an empty destination to preserve earlier evidence.")
@@ -39,6 +42,9 @@ def main():
         elapsed = float(keyboard.clock.getTime())
         if keyList == ["space"] and elapsed >= 0.12:
             name = "space"
+        elif keyList == ["f", "j"] and args.last_frame and trial in (3, 6) and elapsed >= 1.999 and trial not in delivered:
+            delivered.add(trial)
+            return [SimpleNamespace(name="j", rt=1.999, duration=None)]
         elif keyList == ["f", "j"] and elapsed >= 0.20 and trial % 3 and trial not in delivered:
             name = "f" if trial % 3 == 1 else "j"
             delivered.add(trial)
@@ -79,6 +85,11 @@ def main():
     with (dest / "scripted_pilot.csv").open(encoding="utf-8-sig", newline="") as f:
         rows = [r for r in csv.DictReader(f) if r["phase"]]
     assert len(rows) == 6
+    if args.last_frame:
+        for i in (2, 5):
+            r = rows[i]
+            print(f"last-frame probe {r['phase']} key={r['key']!r} rt={r['rt']!r} timeout={r['timeout']}")
+        assert all(rows[i]["key"] == "j" and float(rows[i]["rt"]) == 1.999 for i in (2,5)), "missed key before two-second deadline"
     hz = round(float(rows[0]["frameRate"]))
     intervals = [float(x) for x in (dest / "scripted_pilot_frameIntervals.log").read_text().split(",")]
     offset = 0

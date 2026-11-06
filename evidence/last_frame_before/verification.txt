@@ -1,0 +1,14 @@
+2.5978 	WARNING 	t of last frame was 74.99ms (=1/13)
+3.6477 	WARNING 	t of last frame was 12.54ms (=1/79)
+3.7311 	WARNING 	t of last frame was 16.45ms (=1/60)
+3.7643 	WARNING 	t of last frame was 16.70ms (=1/59)
+3.7977 	WARNING 	Multiple dropped frames have occurred - I'll stop bothering you about them!
+last-frame probe practice key='j' rt='1.999' timeout=0
+last-frame probe experimental key='' rt='' timeout=1
+Traceback (most recent call last):
+  File "/Users/IbraM/Downloads/➕/O4 8683/Assignment 5/tests/pilot_timing.py", line 111, in <module>
+    main()
+  File "/Users/IbraM/Downloads/➕/O4 8683/Assignment 5/tests/pilot_timing.py", line 92, in main
+    assert all(rows[i]["key"] == "j" and float(rows[i]["rt"]) == 1.999 for i in (2,5)), "missed key before two-second deadline"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: missed key before two-second deadline
