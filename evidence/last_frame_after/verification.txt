@@ -1,0 +1,10 @@
+2.5885 	WARNING 	t of last frame was 74.17ms (=1/13)
+last-frame probe practice key='j' rt='1.999' timeout=0
+last-frame probe experimental key='j' rt='1.999' timeout=0
+practice 1 intervals 102 drops 0 span error (s) 0.0
+practice 2 intervals 204 drops 1 span error (s) 0.0
+practice 3 intervals 419 drops 0 span error (s) 0.0
+experimental 1 intervals 204 drops 0 span error (s) 0.0
+experimental 2 intervals 102 drops 0 span error (s) 0.0
+experimental 3 intervals 317 drops 0 span error (s) 0.0
+PASS six real trial windows, including the deliberately delayed second trial

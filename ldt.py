@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2026.2.2),
-    on Thu Nov  5 20:57:02 2026
+    on Thu Nov  5 21:04:10 2026
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -958,22 +958,41 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
             practice_loop.addData('decision.rt', decision.rt)
             practice_loop.addData('decision.duration', decision.duration)
         # Run 'End Routine' code from scoreTrial
-        pressed = decision.keys in ('f', 'j') and 0 <= decision.rt <= 2.0
-        if not pressed:
-            # Include a key queued during the last target frame, before the deadline.
-            lastKeys = decision.getKeys(keyList=['f', 'j'], waitRelease=False)
-            for lastKey in lastKeys:
-                if 0 <= lastKey.rt <= 2.0:
-                    decision.keys, decision.rt = lastKey.name, lastKey.rt
-                    pressed = True
-                    break
         expectedKey = wordKey if correct_response == 'word' else nonwordKey
-        isCorrect = int(pressed and decision.keys == expectedKey)
-        feedbackMessage = ('Correct' if isCorrect else 'Incorrect') if pressed else 'Too slow'
-        thisExp.addData('key', decision.keys if pressed else '')
-        thisExp.addData('rt', decision.rt if pressed else '')
-        thisExp.addData('accuracy', isCorrect)
-        thisExp.addData('timeout', int(not pressed))
+        
+        def storeResponse(keyName, keyRT):
+            correct = int(keyName == expectedKey)
+            thisExp.addData('key', keyName)
+            thisExp.addData('rt', keyRT)
+            thisExp.addData('accuracy', correct)
+            thisExp.addData('timeout', int(keyName == ''))
+            if keyName == '':
+                return 'Too slow'
+            return 'Correct' if correct else 'Incorrect'
+        
+        pressed = decision.keys in ('f', 'j') and 0 <= decision.rt <= 2.0
+        pendingDeadline = not pressed
+        if pressed:
+            feedbackMessage = storeResponse(decision.keys, decision.rt)
+        else:
+            feedbackMessage = ''
+            def finishResponseWindow():
+                # The deadline flip has removed the target. Include queued events
+                # through 2.000 s, including ones after the final drawing iteration.
+                remaining = 2.0 - decision.clock.getTime()
+                if remaining > 0:
+                    core.wait(remaining)
+                keys = decision.getKeys(keyList=['f', 'j'], waitRelease=False)
+                valid = [k for k in keys if 0 <= k.rt <= 2.0]
+                event = min(valid, key=lambda k: k.rt) if valid else None
+                message = storeResponse(event.name, event.rt) if event else storeResponse('', '')
+                currentLoop.addData('decision.keys', event.name if event else None)
+                currentLoop.addData('decision.rt', event.rt if event else None)
+                currentLoop.addData('decision.duration', event.duration if event else None)
+                if phase == 'practice':
+                    feedbackText.setText(message)
+            win.callOnFlip(finishResponseWindow)
+        
         thisExp.addData('prime_shown', prime_text.text)
         thisExp.addData('target_shown', target_text.text)
         thisExp.addData('prime_onset', thisExp.thisEntry['prime_text.started'])
@@ -1028,7 +1047,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
             # *feedbackText* updates
             
             # if feedbackText is starting this frame...
-            if feedbackText.status == NOT_STARTED and frameN >= 0:
+            if feedbackText.status == NOT_STARTED and frameN >= int(pendingDeadline):
                 # keep track of start time/frame for later
                 feedbackText.frameNStart = frameN  # exact frame index
                 feedbackText.tStart = t  # local t and not account for scr refresh
@@ -1678,22 +1697,41 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
             main_loop.addData('decision.rt', decision.rt)
             main_loop.addData('decision.duration', decision.duration)
         # Run 'End Routine' code from scoreTrial
-        pressed = decision.keys in ('f', 'j') and 0 <= decision.rt <= 2.0
-        if not pressed:
-            # Include a key queued during the last target frame, before the deadline.
-            lastKeys = decision.getKeys(keyList=['f', 'j'], waitRelease=False)
-            for lastKey in lastKeys:
-                if 0 <= lastKey.rt <= 2.0:
-                    decision.keys, decision.rt = lastKey.name, lastKey.rt
-                    pressed = True
-                    break
         expectedKey = wordKey if correct_response == 'word' else nonwordKey
-        isCorrect = int(pressed and decision.keys == expectedKey)
-        feedbackMessage = ('Correct' if isCorrect else 'Incorrect') if pressed else 'Too slow'
-        thisExp.addData('key', decision.keys if pressed else '')
-        thisExp.addData('rt', decision.rt if pressed else '')
-        thisExp.addData('accuracy', isCorrect)
-        thisExp.addData('timeout', int(not pressed))
+        
+        def storeResponse(keyName, keyRT):
+            correct = int(keyName == expectedKey)
+            thisExp.addData('key', keyName)
+            thisExp.addData('rt', keyRT)
+            thisExp.addData('accuracy', correct)
+            thisExp.addData('timeout', int(keyName == ''))
+            if keyName == '':
+                return 'Too slow'
+            return 'Correct' if correct else 'Incorrect'
+        
+        pressed = decision.keys in ('f', 'j') and 0 <= decision.rt <= 2.0
+        pendingDeadline = not pressed
+        if pressed:
+            feedbackMessage = storeResponse(decision.keys, decision.rt)
+        else:
+            feedbackMessage = ''
+            def finishResponseWindow():
+                # The deadline flip has removed the target. Include queued events
+                # through 2.000 s, including ones after the final drawing iteration.
+                remaining = 2.0 - decision.clock.getTime()
+                if remaining > 0:
+                    core.wait(remaining)
+                keys = decision.getKeys(keyList=['f', 'j'], waitRelease=False)
+                valid = [k for k in keys if 0 <= k.rt <= 2.0]
+                event = min(valid, key=lambda k: k.rt) if valid else None
+                message = storeResponse(event.name, event.rt) if event else storeResponse('', '')
+                currentLoop.addData('decision.keys', event.name if event else None)
+                currentLoop.addData('decision.rt', event.rt if event else None)
+                currentLoop.addData('decision.duration', event.duration if event else None)
+                if phase == 'practice':
+                    feedbackText.setText(message)
+            win.callOnFlip(finishResponseWindow)
+        
         thisExp.addData('prime_shown', prime_text.text)
         thisExp.addData('target_shown', target_text.text)
         thisExp.addData('prime_onset', thisExp.thisEntry['prime_text.started'])

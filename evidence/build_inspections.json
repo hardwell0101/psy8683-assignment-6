@@ -13,5 +13,19 @@
       "Q7": "Inspected the compiled loops: clock reset and buffer clearing on the first target flip, subsequent polling, and storage of the first allowed key. Physical device latency remains outside software evidence.",
       "Q8": "Inspected scoreTrial End Routine: prime_shown and target_shown read prime_text.text and target_text.text, after the trial."
     }
+  },
+  {
+    "sha256": [
+      "cd797952468f83e239057748a8c46e2f05535cbc1b1c39d4517c4fef7daa989b"
+    ],
+    "settled": {
+      "Q1": "Inspected the participant dialog, two-digit listPath, sequential loops and relative file in the corresponding Builder source. Q1 file evidence separately checks the typed ID against the actual list.",
+      "Q3": "Inspected instructions, feedbackText, and Flow: the instructions interpolate the assigned keys, beginKey and resumeKey accept Space, and practice feedbackMessage branches on accuracy and timeout before the ITI.",
+      "Q4": "Inspected fixation.text (+), prime and target frame starts, the empty background during the long-SOA gap, and blankScreen during the ITI. The next feedback or interval flip removes a response-ended target.",
+      "Q5": "Inspected the measured expInfo frameRate rounding, frame-count starts/stops, and targetFrame = fixFrames + round(soa * refreshHz / 1000) in the corresponding source.",
+      "Q6": "Inspected odd/even wordKey and nonwordKey, instruction interpolation, the decision F/J allowlist, and global Escape handling in the compiled loops.",
+      "Q7": "Inspected the compiled loops: clock reset and buffer clearing on the first target flip, subsequent polling, and storage of the first allowed key. Physical device latency remains outside software evidence. The corrected build drains the final queued keys on the target offset flip and accepts time stamps through 2.000 seconds.",
+      "Q8": "Inspected scoreTrial End Routine: prime_shown and target_shown read prime_text.text and target_text.text, after the trial."
+    }
   }
 ]
