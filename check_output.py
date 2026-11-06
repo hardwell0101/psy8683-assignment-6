@@ -21,9 +21,7 @@ FIELDS = ("participant", "phase", "trial_index", "item_id", "target", "prime",
           "relatedness", "soa", "correct_response", "seed")
 ORDER = ("phase", "trial_index", "item_id")
 TRIAL_MARKERS = FIELDS[1:-1] + ("prime_shown", "target_shown", "prime_onset", "target_onset")
-Q1_PILOT = ("PILOT", "Observe the startup entry and confirm the root ldt.psyexp "
-            "loads the relative two-digit filename. A CSV cannot prove the typed "
-            "value, file location, or loader implementation.")
+
 
 
 def integer(value):
@@ -133,7 +131,7 @@ def check_q1(output, lists_dir):
                           f"of {path.name} on all ten input fields.")
     except (ValueError, OSError) as e:
         result = ("FAIL", str(e))
-    return [result, Q1_PILOT]
+    return result
 
 
 def check_q2(output, lists_dir):
@@ -179,20 +177,21 @@ def main():
     if args.build:
         digest = hashlib.sha256(args.build.read_bytes()).hexdigest()
         reviews = json.loads((Path(__file__).parent/"evidence"/"build_inspections.json").read_text())
-        review = next((r["settled"] for r in reviews if digest in r["sha256"]), {})
+        review = next((r for r in reviews if digest in r["sha256"]), {})
     failed = False
     for path in args.files:
         print(path)
         try:
             output = read_output(path)
             output.known_participant = args.participant
-            q1 = check_q1(output, args.lists)[0]
+            q1 = check_q1(output, args.lists)
             findings = inspect_file(output, path, q1, args.require_log)
             results = [("Q1", *q1), ("Q2", *check_q2(output, args.lists))]
             for prop, verdict, evidence in findings.lines():
-                if verdict == "UNDETERMINED" and evidence.startswith("further evidence") and prop in review:
-                    verdict, evidence = "PILOT", review[prop]
+                if verdict == "UNDETERMINED" and evidence.startswith("further evidence") and prop in review.get("settled", {}):
+                    verdict, evidence = "PILOT", review["settled"][prop]
                 results.append((prop, verdict, evidence))
+            results.extend(tuple(item) for item in review.get("diagnostics", []))
         except (ValueError, OSError, csv.Error, Missing) as error:
             results = [(prop, "FAIL" if prop == "Q1" else "UNDETERMINED",
                         f"cannot read complete trial records: {error}")

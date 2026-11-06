@@ -1,0 +1,14 @@
+0.6709 	WARNING 	t of last frame was 15.37ms (=1/65)
+2.5959 	WARNING 	t of last frame was 75.01ms (=1/13)
+3.0457 	WARNING 	t of last frame was 13.35ms (=1/74)
+6.8636 	WARNING 	t of last frame was 16.36ms (=1/61)
+practice 1 feedback drawing calls: 'Correct'
+practice 2 feedback drawing calls: 'Incorrect'
+practice 3 feedback drawing calls: 'Too slow'
+practice 1 intervals 102 drops 1 span error (s) 0.0
+practice 2 intervals 204 drops 2 span error (s) 0.0
+practice 3 intervals 419 drops 1 span error (s) 0.0
+experimental 1 intervals 204 drops 0 span error (s) 0.0
+experimental 2 intervals 102 drops 0 span error (s) 0.0
+experimental 3 intervals 317 drops 0 span error (s) 0.0
+PASS six real trial windows, including the deliberately delayed second trial

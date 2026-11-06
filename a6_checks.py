@@ -40,10 +40,10 @@ ROLES = {
     "prime": ("prime_text", "primeText", "primeStim", "prime"),
     "target": ("target_text", "targetText", "targetStim", "target"),
     "key": ("decision", "key_resp", "response", "resp", "respKeys"),
-    "feedback": ("feedbackText", "feedback_text", "feedbackStim", "feedback"),
-    "iti": ("blankScreen", "itiText", "iti_blank", "iti", "blank_iti"),
+    "feedback": ("feedbackText", "feedback_text", "feedbackStim"),
+    "iti": ("blankScreen", "itiText", "iti_blank", "blank", "blank_iti"),
     "end": ("endText", "end_text", "endMsg", "end_screen"),
-    "instructions": ("instructionText", "instructions_text", "instrText", "instructions"),
+    "instructions": ("instructionText", "instructions_text", "instrText", "instr_text_stim"),
     "break": ("breakText", "break_text", "breakScreen", "break"),
 }
 NULL_KEYS = ("", "None", "[]")
@@ -80,10 +80,9 @@ class Findings:
 
     def lines(self):
         for (prop, part), groups in self.parts.items():
-            for verdict in ("FAIL", "UNDETERMINED", "PILOT", "PASS"):
-                if verdict in groups:
-                    examples = groups[verdict]
-                    yield prop, verdict, f"{part} [{len(examples)}]: {examples[0]}"
+            verdict = next(v for v in ("FAIL","UNDETERMINED","PILOT","PASS") if v in groups)
+            counts = ", ".join(f"{len(examples)} {v.lower()}" for v, examples in groups.items())
+            yield prop, verdict, f"{part} [{counts}]: {groups[verdict][0]}"
 
 
 def near(actual, desired, tolerance=EPS):
@@ -111,7 +110,7 @@ def target_off(row):
         return stamp(row, "feedback" if cell(row, "phase") == "practice" else "iti")
 
 
-def fixed_timing(start, stop, expected_frames, hz, flips=None):
+def fixed_timing(start, stop, expected_frames, hz, flips=None, drops=0):
     measured = (stop-start)*hz
     if stop < start:
         return False, "offset precedes onset"
@@ -126,6 +125,9 @@ def fixed_timing(start, stop, expected_frames, hz, flips=None):
             actual = indices[1] - indices[0]
             return actual == expected_frames, (f"{actual} logged flip intervals, "
                 f"{measured:.2f} elapsed frames, expected {expected_frames}")
+    if drops and measured > expected_frames + 0.5:
+        raise Missing(f"{measured:.2f} elapsed frames vs {expected_frames} requested, "
+                      f"{drops} long interval(s) on trial; need event-aligned flip log to locate them")
     return round(measured) == expected_frames, (f"{measured:.2f} elapsed frames, "
         f"expected {expected_frames}; elapsed estimate at rounded Hz")
 
@@ -140,6 +142,7 @@ def check_logs(output, path, hz, findings, required):
     if not available:
         findings.add("I1", "interval log", "FAIL" if required or with_counts else "UNDETERMINED",
                      f"need matching {log.name}")
+    drops = None
     try:
         if not rows:
             raise ValueError("no trials")
@@ -152,6 +155,8 @@ def check_logs(output, path, hz, findings, required):
     except (Missing, ValueError) as e:
         findings.add("I2", "per-trial counts", "FAIL" if required or isinstance(e, ValueError)
                      or (available and not with_counts) else "UNDETERMINED", str(e))
+        drops = None
+    if not available:
         return {}
     try:
         values = [number(s) for s in re.split(r"[,\s]+", log.read_text().strip()) if s]
@@ -162,8 +167,9 @@ def check_logs(output, path, hz, findings, required):
         findings.add("I2", "log agreement", "UNDETERMINED", "need a valid interval log")
         return {}
     observed = sum(x > 1.5/hz for x in values)
-    findings.add("I2", "whole-run agreement", "PASS" if observed == sum(drops) else "FAIL",
-                 f"CSV {sum(drops)}, log {observed} above {1.5/hz:.8f}s")
+    if drops is not None:
+        findings.add("I2", "whole-run agreement", "PASS" if observed == sum(drops) else "FAIL",
+                     f"CSV {sum(drops)}, log {observed} above {1.5/hz:.8f}s")
     # Fall back to the assignment's approximate total when a different build
     # records only the required columns.
     try:
@@ -177,7 +183,7 @@ def check_logs(output, path, hz, findings, required):
     except (Missing, ValueError) as e:
         findings.add("I1", "approximate window coverage", "UNDETERMINED", str(e))
     offset, segments = 0, {}
-    for (line, row), expected_drops in zip(rows, drops):
+    for idx, (line, row) in enumerate(rows):
         try:
             n = count(cell(row, "recorded_intervals"))
             if n < 1 or offset+n > len(values):
@@ -194,8 +200,9 @@ def check_logs(output, path, hz, findings, required):
                          f"line {line}: {message}")
             if ok:
                 segments[line] = flips
-            findings.check("I2", "trial slice count", line,
-                lambda: same(sum(x > 1.5/hz for x in segment), expected_drops))
+            if drops is not None:
+                findings.check("I2", "trial slice count", line,
+                    lambda: same(sum(x > 1.5/hz for x in segment), drops[idx]))
         except Missing as e:
             findings.add("I1", "exact per-trial log boundary", "UNDETERMINED", str(e))
             return {}
@@ -215,25 +222,48 @@ def inspect_file(output, path, q1, require_log=False):
         hz = None
         f.add("Q5", "display rate", "UNDETERMINED" if isinstance(e, Missing) else "FAIL", str(e))
     segments = check_logs(output, path, hz, f, require_log) if hz else {}
+    if output.records:
+        header = output.records[0][1]
+        for prop, fields in {"Q8":("prime_shown","target_shown"),
+                             "Q9":("prime_onset","target_onset"),
+                             "Q10":("key","rt","accuracy","timeout")}.items():
+            absent = [name for name in fields if name not in header]
+            if absent:
+                f.add(prop, "required output columns", "FAIL", ", ".join(absent)+" missing")
     phases = [cell(r, "phase") for _, r in output.trials]
     sequence_ok = phases == ["practice"]*8 + ["experimental"]*96
     f.add("Q3", "phase counts and order", "PASS" if sequence_ok else "FAIL", str(dict(Counter(phases))))
 
     types = []
+    previous_iti_stop = None
     trials = {line for line, _ in output.trials}
     for line, row in output.records:
         if line in trials:
             types.append(cell(row, "phase"))
+            if previous_iti_stop is not None:
+                f.check("Q4", "next fixation after ITI", line,
+                        lambda: near(stamp(row,"fix"), previous_iti_stop))
+            try:
+                previous_iti_stop = stamp(row,"iti","stopped")
+            except (Missing,ValueError):
+                previous_iti_stop = None
             continue
         for role in ("instructions", "break", "end"):
             try:
                 stamp(row, role)
             except Missing:
                 continue
+            except ValueError as e:
+                f.add("Q3", "nontrial screen stamp", "FAIL", f"line {line}: {e}")
+                continue
             types.append(role)
+            if previous_iti_stop is not None:
+                f.check("Q3","screen follows last ITI",line,lambda: near(stamp(row,role),previous_iti_stop))
+            previous_iti_stop = None
             if role == "end" and hz:
-                f.check("Q3", "end screen duration", line, lambda: fixed_timing(
-                    stamp(row, "end"), stamp(row, "end", "stopped"), round(2*hz), hz))
+                for prop in ("Q3", "Q5"):
+                    f.check(prop, "end screen duration", line, lambda: fixed_timing(
+                        stamp(row, "end"), stamp(row, "end", "stopped"), round(2*hz), hz))
             elif role in ("instructions", "break"):
                 keys = ("beginKey.keys", "instr_key.keys", "instr_resp.keys") if role == "instructions" else (
                         "resumeKey.keys", "break_key.keys", "break_resp.keys")
@@ -242,6 +272,8 @@ def inspect_file(output, path, q1, require_log=False):
         else:
             types.append("unidentified")
     wanted = ["instructions"]+["practice"]*8+["break"]+["experimental"]*96+["end"]
+    if not any("end" == k for k in types):
+        f.add("Q5","end screen duration","UNDETERMINED","need the end stimulus flip stamps")
     if all(k in types for k in ("instructions", "break", "end")):
         f.add("Q3", "screen order", "PASS" if types == wanted else "FAIL", "row sequence compared with specification")
     else:
@@ -254,31 +286,51 @@ def inspect_file(output, path, q1, require_log=False):
         def fixed(label, start, end, seconds, logged=True, prop="Q4"):
             if hz:
                 result = lambda: fixed_timing(start(), end(), round(seconds*hz), hz,
-                                               segments.get(line) if logged else None)
+                                               segments.get(line) if logged else None, drops if logged else 0)
                 check(prop, label, result)
                 check("Q5", label+" frame count", result)
 
+        try:
+            drops = count(cell(r, "dropped_frames"))
+        except (Missing, ValueError):
+            drops = 0  # I2 reports any missing or malformed counter.
         practice = cell(r, "phase") == "practice"
         if practice:
             fixed("practice feedback", lambda: stamp(r, "feedback"), lambda: stamp(r, "feedback","stopped"), 1, False, "Q3")
         else:
             def no_feedback():
-                return same(component(r, "feedback", "started"), "")
+                start = component(r, "feedback", "started")
+                return same(start, "")
             check("Q3", "no main feedback", no_feedback)
         fixed("fixation", lambda: stamp(r, "fix"), lambda: stamp(r, "fix","stopped"), .5)
         fixed("prime", lambda: stamp(r, "prime"), lambda: stamp(r, "prime","stopped"), .15)
         if hz:
             check("Q4", "SOA", lambda: fixed_timing(stamp(r,"prime"),stamp(r,"target"),
-                  round(number(cell(r,"soa"))*hz/1000),hz,segments.get(line)))
+                  round(number(cell(r,"soa"))*hz/1000),hz,segments.get(line),drops))
             check("Q5", "SOA frames", lambda: fixed_timing(stamp(r,"prime"),stamp(r,"target"),
-                  round(number(cell(r,"soa"))*hz/1000),hz,segments.get(line)))
+                  round(number(cell(r,"soa"))*hz/1000),hz,segments.get(line),drops))
         fixed("ITI", lambda: stamp(r, "iti"), lambda: stamp(r, "iti","stopped"), .5, False)
         check("Q4","fixation to prime transition",lambda: near(stamp(r,"fix","stopped"),stamp(r,"prime")))
+        if hz:
+            def blank_gap():
+                frames = round(number(cell(r,"soa"))*hz/1000) - round(.15*hz)
+                return fixed_timing(stamp(r,"prime","stopped"),stamp(r,"target"),
+                                    frames,hz,segments.get(line),drops)
+            check("Q4","blank interval from prime offset to target",blank_gap)
         for role, transform in (("prime", str.lower), ("target", str.upper)):
             def shown():
                 return same(cell(r,role+"_shown"),transform(cell(r,role)))
             check("Q4",role+" recorded content",shown)
             check("Q8",role+" shown vs list",shown)
+        # Feedback wording is observable only if the build logged it.
+        if practice and any(k in r for k in ("feedback_shown", "feedback_message", "feedbackShown")):
+            check("Q3", "feedback wording", lambda: same(
+                cell(r,"feedback_shown","feedback_message","feedbackShown"),
+                "Too slow" if count(cell(r,"timeout")) else
+                "Correct" if count(cell(r,"accuracy")) else "Incorrect"))
+        if practice:
+            check("Q3", "feedback directly precedes ITI", lambda: near(
+                stamp(r,"feedback","stopped"),stamp(r,"iti")))
         check("Q6","accepted recorded key",lambda: (cell(r,"key") in ("","f","j"),repr(cell(r,"key"))))
         def score():
             key, cat = cell(r,"key"), cell(r,"correct_response")
@@ -303,7 +355,8 @@ def inspect_file(output, path, q1, require_log=False):
             key, rt = cell(r,"key"), cell(r,"rt")
             rawkey = component(r,"key","keys")
             if not key:
-                return rawkey in NULL_KEYS and not rt, f"timeout vs automatic key {rawkey!r}"
+                rawrt = component(r,"key","rt")
+                return rawkey in NULL_KEYS and rawrt in NULL_KEYS and not rt, f"timeout vs automatic key {rawkey!r}"
             ok, message = near(number(rt),number(component(r,"key","rt")))
             return ok and key == rawkey, message+f", key {key!r} vs {rawkey!r}"
         check("Q7","saved response vs automatic key and RT",raw_response)
@@ -312,13 +365,34 @@ def inspect_file(output, path, q1, require_log=False):
                 start = stamp(r,"target")
                 duration = target_off(r)-start
                 if count(cell(r,"timeout")) == 1:
-                    return fixed_timing(start,start+duration,round(2*hz),hz)
-                rt = number(cell(r,"rt"))
-                # A frame-polled response can wait for polling and a following flip.
-                return -EPS <= duration-rt <= 2/hz+EPS, f"target off {duration:.5f}s after onset, RT {rt:.5f}s"
+                    # The final boundary flip is excluded from I1. Add it
+                    # to count actual display intervals for the timeout.
+                    flips = segments.get(line)
+                    if flips and target_off(r) > flips[-1] + EPS:
+                        flips = flips + [target_off(r)]
+                    return fixed_timing(start, start+duration, round(2*hz), hz, flips, drops)
+                key_time = stamp(r,"key") + number(component(r,"key","rt"))
+                lag = target_off(r)-key_time
+                if lag > 2/hz+EPS and drops:
+                    raise Missing(f"replacement lag {lag:.5f}s on trial with a long flip interval; need polling and offset evidence")
+                if lag < -EPS or lag > 3/hz:
+                    return False, f"replacement flip minus recorded key time = {lag:.5f}s"
+                if lag > 2/hz+EPS:
+                    raise Missing(f"replacement {lag*hz:.2f} refresh periods after key; "
+                                  "need key polling time and flip intervals to attribute delay")
+                return True, f"replacement flip {lag:.5f}s after keyboard event"
             check("Q4","target removed on response or deadline",response_window)
-            if cell(r,"timeout") == "1":
-                check("Q10","timeout referenced to target onset",response_window)
+            if r.get("timeout") in (["1"], ["1.0"]):
+                def deadline():
+                    elapsed = stamp(r,"key","stopped")-stamp(r,"target")
+                    # A late offset with actual frame loss can reflect display
+                    # timing; the queue and the acceptance rule are distinct.
+                    if elapsed < 2-.5/hz:
+                        return False, f"keyboard closed {elapsed:.5f}s after target"
+                    return True, f"keyboard covered deadline, stopped at {elapsed:.5f}s"
+                check("Q10","keyboard available through target deadline",deadline)
+    if output.trials and not any(cell(r, "timeout") == "1" for _, r in output.trials if "timeout" in r):
+        f.add("Q10","timeout case","UNDETERMINED","need a trial without a response through the deadline")
     f.add("Q10","ten unmodified trial-list fields",*q1)
     for prop, need in {
         "Q1":"dialog and relative filename in the build",

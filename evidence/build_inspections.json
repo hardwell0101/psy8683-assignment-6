@@ -12,7 +12,14 @@
       "Q6": "Inspected odd/even wordKey and nonwordKey, instruction interpolation, the decision F/J allowlist, and global Escape handling in the compiled loops.",
       "Q7": "Inspected the compiled loops: clock reset and buffer clearing on the first target flip, subsequent polling, and storage of the first allowed key. Physical device latency remains outside software evidence.",
       "Q8": "Inspected scoreTrial End Routine: prime_shown and target_shown read prime_text.text and target_text.text, after the trial."
-    }
+    },
+    "diagnostics": [
+      [
+        "Q10",
+        "FAIL",
+        "Last-frame test at adc14ea with the A5 response logic: a main-trial event at 1.999 s was coded timeout. See evidence/last_frame_before/verification.txt. Fixed at e7a7ced."
+      ]
+    ]
   },
   {
     "sha256": [
@@ -26,6 +33,13 @@
       "Q6": "Inspected odd/even wordKey and nonwordKey, instruction interpolation, the decision F/J allowlist, and global Escape handling in the compiled loops.",
       "Q7": "Inspected the compiled loops: clock reset and buffer clearing on the first target flip, subsequent polling, and storage of the first allowed key. Physical device latency remains outside software evidence. The corrected build drains the final queued keys on the target offset flip and accepts time stamps through 2.000 seconds.",
       "Q8": "Inspected scoreTrial End Routine: prime_shown and target_shown read prime_text.text and target_text.text, after the trial."
-    }
+    },
+    "diagnostics": [
+      [
+        "Q10",
+        "PILOT",
+        "Scripted practice and main trials both accepted RT 1.999 s on the corrected build. See evidence/last_frame_after/verification.txt."
+      ]
+    ]
   }
 ]

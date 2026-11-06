@@ -32,6 +32,7 @@ def main():
     import_conditions = ex.data.importConditions
     trial = 0
     delivered = set()
+    shown_feedback = {}
     in_trial = False
     injected = False
 
@@ -67,6 +68,9 @@ def main():
             if in_trial and trial == 2 and not injected and win.recordFrameIntervalsJustTurnedOn is False:
                 time.sleep(0.060)
                 injected = True
+            for stimulus in win._toDraw:
+                if stimulus.name == "feedbackText":
+                    shown_feedback.setdefault(trial,set()).add(stimulus.text)
             return original_flip(*args, **kwargs)
 
         try:
@@ -85,6 +89,10 @@ def main():
     with (dest / "scripted_pilot.csv").open(encoding="utf-8-sig", newline="") as f:
         rows = [r for r in csv.DictReader(f) if r["phase"]]
     assert len(rows) == 6
+    for i, row in enumerate(rows[:3], 1):
+        expected = "Too slow" if row["timeout"] == "1" else "Correct" if row["accuracy"] == "1" else "Incorrect"
+        assert shown_feedback[i] == {expected}, (i, shown_feedback[i], expected)
+        print(f"practice {i} feedback drawing calls: {expected!r}")
     if args.last_frame:
         for i in (2, 5):
             r = rows[i]

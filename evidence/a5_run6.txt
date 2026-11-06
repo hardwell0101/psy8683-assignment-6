@@ -1,0 +1,50 @@
+data/6_ldt_2026-11-04_12h59.17.668.csv
+  Q1 PASS All 104 recorded trials match rows of trials_p06.csv on all ten input fields.
+  Q2 PASS 104/104 trial identities from trials_p06.csv in exact file order (phase, trial_index, item_id).
+  I1 UNDETERMINED interval log [1 undetermined]: need matching 6_ldt_2026-11-04_12h59.17.668_frameIntervals.log
+  I2 UNDETERMINED per-trial counts [1 undetermined]: need dropped_frames
+  Q3 PASS phase counts and order [1 pass]: {'practice': 8, 'experimental': 96}
+  Q3 PASS instructions SPACE response [1 pass]: line 2: 'space' vs 'space'
+  Q4 PASS next fixation after ITI [102 pass]: line 4: 3.873741s vs 3.873741s
+  Q3 PASS screen follows last ITI [2 pass]: line 11: 27.174437s vs 27.174437s
+  Q3 PASS break SPACE response [1 pass]: line 11: 'space' vs 'space'
+  Q3 PASS end screen duration [1 pass]: line 108: 239.99 elapsed frames, expected 240; elapsed estimate at rounded Hz
+  Q5 PASS end screen duration [1 pass]: line 108: 239.99 elapsed frames, expected 240; elapsed estimate at rounded Hz
+  Q3 PASS screen order [1 pass]: row sequence compared with specification
+  Q3 PASS practice feedback [8 pass]: line 3: 119.99 elapsed frames, expected 120; elapsed estimate at rounded Hz
+  Q5 PASS practice feedback frame count [8 pass]: line 3: 119.99 elapsed frames, expected 120; elapsed estimate at rounded Hz
+  Q4 PASS fixation [104 pass]: line 3: 60.10 elapsed frames, expected 60; elapsed estimate at rounded Hz
+  Q5 PASS fixation frame count [104 pass]: line 3: 60.10 elapsed frames, expected 60; elapsed estimate at rounded Hz
+  Q4 PASS prime [104 pass]: line 3: 18.02 elapsed frames, expected 18; elapsed estimate at rounded Hz
+  Q5 PASS prime frame count [104 pass]: line 3: 18.02 elapsed frames, expected 18; elapsed estimate at rounded Hz
+  Q4 PASS SOA [104 pass]: line 3: 18.02 elapsed frames, expected 18; elapsed estimate at rounded Hz
+  Q5 PASS SOA frames [104 pass]: line 3: 18.02 elapsed frames, expected 18; elapsed estimate at rounded Hz
+  Q4 PASS ITI [104 pass]: line 3: 59.91 elapsed frames, expected 60; elapsed estimate at rounded Hz
+  Q5 PASS ITI frame count [104 pass]: line 3: 59.91 elapsed frames, expected 60; elapsed estimate at rounded Hz
+  Q4 PASS fixation to prime transition [104 pass]: line 3: 1.541212s vs 1.541212s
+  Q4 PASS blank interval from prime offset to target [104 pass]: line 3: 0.00 elapsed frames, expected 0; elapsed estimate at rounded Hz
+  Q4 PASS prime recorded content [104 pass]: line 3: 'plane' vs 'plane'
+  Q8 PASS prime shown vs list [104 pass]: line 3: 'plane' vs 'plane'
+  Q4 PASS target recorded content [104 pass]: line 3: 'PILOT' vs 'PILOT'
+  Q8 PASS target shown vs list [104 pass]: line 3: 'PILOT' vs 'PILOT'
+  Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.374488s vs 3.374488s
+  Q6 PASS accepted recorded key [104 pass]: line 3: 'f'
+  Q10 PASS accuracy under participant mapping [104 pass]: line 3: 0 vs 0
+  Q7 PASS keyboard starts on target flip [104 pass]: line 3: 1.691419s vs 1.691419s
+  Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.541212s vs 1.541212s
+  Q9 PASS target onset vs component flip [104 pass]: line 3: 1.691419s vs 1.691419s
+  Q10 PASS response fields and two-second limit [104 pass]: line 3: key='f', rt='0.6673451249953359', timeout=0
+  Q7 PASS saved response vs automatic key and RT [104 pass]: line 3: 0.667345s vs 0.667345s, key 'f' vs 'f'
+  Q4 UNDETERMINED target removed on response or deadline [102 pass, 2 undetermined]: line 6: replacement 2.46 refresh periods after key; need key polling time and flip intervals to attribute delay
+  Q3 PASS no main feedback [96 pass]: line 12: '' vs ''
+  Q10 UNDETERMINED timeout case [1 undetermined]: need a trial without a response through the deadline
+  Q10 PASS ten unmodified trial-list fields [1 pass]: All 104 recorded trials match rows of trials_p06.csv on all ten input fields.
+  Q1 PILOT Inspected the participant dialog, two-digit listPath, sequential loops and relative file in the corresponding Builder source. Q1 file evidence separately checks the typed ID against the actual list.
+  Q3 PILOT Inspected instructions, feedbackText, and Flow: the instructions interpolate the assigned keys, beginKey and resumeKey accept Space, and practice feedbackMessage branches on accuracy and timeout before the ITI.
+  Q4 PILOT Inspected fixation.text (+), prime and target frame starts, the empty background during the long-SOA gap, and blankScreen during the ITI. The next feedback or interval flip removes a response-ended target.
+  Q5 PILOT Inspected the measured expInfo frameRate rounding, frame-count starts/stops, and targetFrame = fixFrames + round(soa * refreshHz / 1000) in the corresponding source.
+  Q6 PILOT Inspected odd/even wordKey and nonwordKey, instruction interpolation, the decision F/J allowlist, and global Escape handling in the compiled loops.
+  Q7 PILOT Inspected the compiled loops: clock reset and buffer clearing on the first target flip, subsequent polling, and storage of the first allowed key. Physical device latency remains outside software evidence.
+  Q8 PILOT Inspected scoreTrial End Routine: prime_shown and target_shown read prime_text.text and target_text.text, after the trial.
+  Q9 UNDETERMINED further evidence [1 undetermined]: need independent light sensor aligned to flip time for physical display onset
+  Q10 FAIL Last-frame test at adc14ea with the A5 response logic: a main-trial event at 1.999 s was coded timeout. See evidence/last_frame_before/verification.txt. Fixed at e7a7ced.
