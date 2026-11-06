@@ -332,13 +332,20 @@ def inspect_file(output, path, q1, require_log=False):
             check("Q3", "feedback directly precedes ITI", lambda: near(
                 stamp(r,"feedback","stopped"),stamp(r,"iti")))
         check("Q6","accepted recorded key",lambda: (cell(r,"key") in ("","f","j"),repr(cell(r,"key"))))
-        def score():
+        def score(automatic=False):
             key, cat = cell(r,"key"), cell(r,"correct_response")
             if cat not in ("word","nonword"):
                 raise ValueError(f"unknown category {cat!r}")
             pid = output.known_participant or count(cell(r,"participant"))
             correct_key = "f" if (pid % 2 == 1) == (cat == "word") else "j"
-            return same(count(cell(r,"accuracy")),int(key == correct_key))
+            response_score = cell(r,"accuracy")
+            if automatic:
+                try:
+                    response_score = component(r,"key","corr")
+                except Missing:
+                    pass  # The custom accuracy flag is the available scoring evidence.
+            return same(count(response_score),int(key == correct_key))
+        check("Q6","scored keys agree with specified parity mapping",lambda: score(automatic=True))
         check("Q10","accuracy under participant mapping",score)
         check("Q7","keyboard starts on target flip",lambda: near(stamp(r,"key"),stamp(r,"target")))
         for role in ("prime","target"):

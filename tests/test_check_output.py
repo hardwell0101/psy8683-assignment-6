@@ -59,6 +59,13 @@ class MutationTests(unittest.TestCase):
         self.change("prime_text.stopped",float(self.rows[1][i])+1/60)
         self.assertIn("Q5 FAIL prime frame count",self.check())
 
+    def test_automatic_and_custom_scores_can_disagree(self):
+        self.fixture()
+        self.change("key_resp.corr",1-int(self.rows[1][self.header.index("accuracy")]))
+        text = self.check()
+        self.assertIn("Q6 FAIL scored keys", text)
+        self.assertIn("Q10 PASS accuracy under participant mapping", text)
+
     def test_unknown_component_is_open(self):
         self.fixture()
         self.header[self.header.index("key_resp.started")] = "unknown_device.started"
@@ -106,9 +113,9 @@ class MutationTests(unittest.TestCase):
             self.assertIn(s,text)
         # Keep the global total right while moving a drop to the wrong trial.
         i=self.header.index("dropped_frames")
-        before=count1=int(self.rows[2][i])
+        before=int(self.rows[2][i])
         self.assertGreaterEqual(before,1)
-        self.change("dropped_frames",count1-1,2)
+        self.change("dropped_frames",before-1,2)
         self.change("dropped_frames",int(self.rows[1][i])+1,1)
         text=self.check("--require-log")
         self.assertIn("I2 PASS whole-run agreement",text)

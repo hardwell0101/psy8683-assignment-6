@@ -29,6 +29,7 @@ data/6_ldt_2026-11-04_12h59.17.668.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'PILOT' vs 'PILOT'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.374488s vs 3.374488s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'f'
+  Q6 PASS scored keys agree with specified parity mapping [104 pass]: line 3: 0 vs 0
   Q10 PASS accuracy under participant mapping [104 pass]: line 3: 0 vs 0
   Q7 PASS keyboard starts on target flip [104 pass]: line 3: 1.691419s vs 1.691419s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.541212s vs 1.541212s

@@ -29,6 +29,7 @@ data/3_ldt_2026-11-04_12h44.45.576.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'BLODGE' vs 'BLODGE'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.923509s vs 3.923509s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'j'
+  Q6 PASS scored keys agree with specified parity mapping [104 pass]: line 3: 1 vs 1
   Q10 PASS accuracy under participant mapping [104 pass]: line 3: 1 vs 1
   Q7 PASS keyboard starts on target flip [104 pass]: line 3: 2.248698s vs 2.248698s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.248658s vs 1.248658s

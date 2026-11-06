@@ -29,6 +29,7 @@ provided/output_files/file_A.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'PILOT' vs 'PILOT'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.883333s vs 3.883333s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'f'
+  Q6 FAIL scored keys agree with specified parity mapping [97 fail, 7 pass]: line 3: 0 vs 1
   Q10 FAIL accuracy under participant mapping [97 fail, 7 pass]: line 3: 0 vs 1
   Q7 PASS keyboard starts on target flip [104 pass]: line 3: 2.366667s vs 2.366667s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.366667s vs 1.366667s
@@ -78,6 +79,7 @@ provided/output_files/file_B.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'BLODGE' vs 'BLODGE'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.300000s vs 3.300000s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'f'
+  Q6 PASS scored keys agree with specified parity mapping [104 pass]: line 3: 1 vs 1
   Q10 PASS accuracy under participant mapping [104 pass]: line 3: 1 vs 1
   Q7 PASS keyboard starts on target flip [104 pass]: line 3: 1.516667s vs 1.516667s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.366667s vs 1.366667s
@@ -127,6 +129,7 @@ provided/output_files/file_C.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'COPPER' vs 'COPPER'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.983333s vs 3.983333s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'f'
+  Q6 PASS scored keys agree with specified parity mapping [104 pass]: line 3: 1 vs 1
   Q10 PASS accuracy under participant mapping [104 pass]: line 3: 1 vs 1
   Q7 PASS keyboard starts on target flip [104 pass]: line 3: 2.366667s vs 2.366667s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.366667s vs 1.366667s
@@ -176,6 +179,7 @@ provided/output_files/file_D.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'BLODGE' vs 'BLODGE'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.150000s vs 3.150000s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'f'
+  Q6 PASS scored keys agree with specified parity mapping [104 pass]: line 3: 1 vs 1
   Q10 PASS accuracy under participant mapping [104 pass]: line 3: 1 vs 1
   Q7 PASS keyboard starts on target flip [104 pass]: line 3: 1.516667s vs 1.516667s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.366667s vs 1.366667s
@@ -225,6 +229,7 @@ provided/output_files/file_E.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'GARLIC' vs 'GARLIC'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.166667s vs 3.166667s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'f'
+  Q6 PASS scored keys agree with specified parity mapping [104 pass]: line 3: 1 vs 1
   Q10 PASS accuracy under participant mapping [104 pass]: line 3: 1 vs 1
   Q7 PASS keyboard starts on target flip [104 pass]: line 3: 1.516667s vs 1.516667s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.366667s vs 1.366667s
@@ -274,6 +279,7 @@ provided/output_files/file_F.csv
   Q8 PASS target shown vs list [104 pass]: line 3: 'VELVET' vs 'VELVET'
   Q3 PASS feedback directly precedes ITI [8 pass]: line 3: 3.166667s vs 3.166667s
   Q6 PASS accepted recorded key [104 pass]: line 3: 'j'
+  Q6 PASS scored keys agree with specified parity mapping [104 pass]: line 3: 1 vs 1
   Q10 PASS accuracy under participant mapping [104 pass]: line 3: 1 vs 1
   Q7 FAIL keyboard starts on target flip [104 fail]: line 3: 0.866667s vs 1.516667s
   Q9 PASS prime onset vs component flip [104 pass]: line 3: 1.366667s vs 1.366667s
