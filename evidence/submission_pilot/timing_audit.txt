@@ -1,0 +1,17 @@
+evidence/submission_pilot/scripted_pilot.csv
+rounded rate = 120 Hz; 6 trials; 1348 intervals; 7 drops; longest = 75.3998 ms
+fixation: expected 60; achieved frames x frequency {60: 3, 61: 2, 68: 1}
+prime: expected 18; achieved frames x frequency {18: 5, 20: 1}
+SOA 150: expected 18; achieved frames x frequency {18: 2, 20: 1}
+ITI: expected 60; achieved frames x frequency {60: 4, 62: 1, 63: 1}
+feedback: expected 120; achieved frames x frequency {120: 2, 122: 1}
+SOA 1000: expected 120; achieved frames x frequency {120: 3}
+end screen: expected 240; achieved frames x frequency {240: 1}
+line 3 fixation: 60.939 elapsed vs 60 planned frames; within-event long intervals (ms): [16.277]; trial drops=3
+line 3 prime: 20.012 elapsed vs 18 planned frames; within-event long intervals (ms): [16.706, 13.816]; trial drops=3
+line 3 SOA 150: 20.012 elapsed vs 18 planned frames; within-event long intervals (ms): [16.706, 13.816]; trial drops=3
+line 4 fixation: 68.422 elapsed vs 60 planned frames; within-event long intervals (ms): [75.4]; trial drops=1
+line 5 fixation: 61.034 elapsed vs 60 planned frames; within-event long intervals (ms): [14.17]; trial drops=2
+line 5 feedback: 122.045 elapsed vs 120 planned frames; trial drops=2; outside the recording window; the log cannot identify a cause
+line 7 ITI: 61.998 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 8 ITI: 63.029 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause

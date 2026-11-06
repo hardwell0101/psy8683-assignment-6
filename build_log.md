@@ -63,3 +63,50 @@ Mac's reported display setting. Codex calculated the frame counts and mapped
 Ibra's rule and three exceptions to the table. Commit `a9fbe92` freezes the
 answers before the first new output check. This handoff preserves the same
 Builder file and compiled script before Codex adds frame recording.
+
+### Instrumentation and fixes
+
+After the pre-handoff commit (`acf8fcd`), Codex added flip-interval recording
+for each trial (`adc14ea`) and recompiled the Builder file in the PsychoPy
+Studio 2026.2.2 environment. At the end of each trial the program saves the
+change in the number of long intervals, the number of intervals recorded,
+and the time of the last recorded flip. After the end screen clears, it
+writes all intervals to the participant's paired frame log. The checker
+tests each trial separately, including whether the intervals span the time
+from fixation onset to its last recorded flip. The long-interval threshold
+is 1.5 nominal frame periods. [PsychoPy frame recording](https://psychopy.org/general/timing/detectingFrameDrops.html)
+
+Commit `3bc4c00` preserves the first six-file checker output. Reading
+the affected columns afterward showed why F's visible target duration
+and the keyboard deadline needed separate tests. Later revisions also
+compared the keyboard's automatic scoring with the required mapping.
+The submitted A5 experiment could miss a keyboard event timestamped
+1.999 s. The saved probe in `ab034c5` reproduced that error on a main
+trial. Commit `e7a7ced` checks for queued keys through the deadline on
+target removal and uses the final outcome for practice feedback. A
+second fix (`937c9c2`) defers writing the log until the display clears
+so disk access cannot hold the end screen open.
+
+The final six-trial windowed diagnostic used scripted key events and real
+window flips. Both practice and main accepted the 1.999 s probe. All six
+trial spans matched their slices of the log, with seven long intervals
+among 1,348 recorded. One trial included a deliberate delay. Two ITIs
+and one feedback presentation ran long. They lie outside the trial
+recording window, so this log cannot establish the causes. The end screen
+spanned the planned 240 frame periods. See
+`evidence/submission_pilot/verification.txt` and
+`evidence/submission_pilot/timing_audit.txt`. The checker also passed
+13 tests, including wrong source fields, scoring and per-trial allocation
+of frame drops. Results are in `evidence/checker_tests.txt`.
+
+### AI use for Assignment 6
+
+I supplied my predictions in chat before the new checks. I used the
+written A5 findings to recall the six files. Codex translated my answers
+into the table, calculated frame counts, and committed the predictions.
+After the handoff I used Codex to edit and compile the experiment, write
+and test the checker, run the scripted diagnostic, and draft the report
+from the saved outputs. The report identifies where the first checker
+misread file F and where testing contradicted my prediction about my own
+build. The diagnostic used simulated key events. The full participant
+7 and 8 sessions require my own keyboard responses.
