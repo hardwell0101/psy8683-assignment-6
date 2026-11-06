@@ -58,9 +58,9 @@ I used Codex for Builder guidance while I made the initial instructions, trial r
 
 Commit `928db57` is the A5 baseline with the three A6 templates. The
 experiment and runs 3 and 6 at this checkpoint are the original A5 evidence.
-Ibra supplied the predictions in chat using the written A5 findings and the
+Hakimi supplied the predictions in chat using the written A5 findings and the
 Mac's reported display setting. Codex calculated the frame counts and mapped
-Ibra's rule and three exceptions to the table. Commit `a9fbe92` freezes the
+Hakimi's rule and three exceptions to the table. Commit `a9fbe92` freezes the
 answers before the first new output check. This handoff preserves the same
 Builder file and compiled script before Codex adds frame recording.
 
@@ -109,4 +109,4 @@ For each accepted CSV, Codex ran `python3 check_output.py` with the expected par
 
 ### AI use for Assignment 6
 
-I asked Codex to handle the technical work and tell me when the assignment needed my input. I supplied my predictions before the new checks, using the written A5 findings to recall the six files. Codex calculated the predicted frame counts, translated my answers into the table, and committed them. After the handoff, Codex generated the instrumentation, compiled the experiment, extended the checker, and wrote the scripted pilot and tests. It drafted the report, data dictionary and reconciliation from the CSVs, frame logs and build. The first checker confused target offset with the keyboard deadline in file F. The corrected version checks both timestamps. I chose to repeat participant 7 when we found the chat had stayed open during the first session. I supplied all participant responses in the two accepted runs. Only the separately labeled diagnostic sessions used simulated key events.
+I made my predictions before the checks. Codex calculated the frame counts and recorded my predictions in the table. I asked Codex to add frame recording to PsychoPy, extend the checker, and test the changes. I reviewed the reported results against the assignment and told Codex when to continue. The first checker treated target offset as the keyboard deadline in file F. Codex corrected it to check both times. When we found that ChatGPT had been open during my first quiet run, I repeated run 7 with it closed. I made all the keypresses in runs 7 and 8. Codex used the saved outputs to draft the report, data dictionary, and comparison with my predictions.
