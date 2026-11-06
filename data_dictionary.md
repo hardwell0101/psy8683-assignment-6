@@ -1,6 +1,6 @@
 # Run 7 data dictionary
 
-The CSV has 107 data rows. In order, these are the opening instructions, eight practice trials, the break, 96 experimental trials and the end screen. Trial timestamps in seconds use PsychoPy’s run clock. Keyboard RTs use a clock reset for the corresponding screen. A display flip records when the software presented a frame. Physical light onset requires an independent measurement.
+The accepted file is `data/7_ldt_2026-11-06_13h53.16.033.csv`. It has 107 data rows. In order, these are the opening instructions, eight practice trials, the break, 96 experimental trials and the end screen. Trial timestamps in seconds use PsychoPy’s run clock. Keyboard RTs use a clock reset for the corresponding screen. A display flip records when the software presented a frame. Physical light onset requires an independent measurement.
 
 Positions below follow the exported header, including both participant fields. “Trials” means all 104 trials. “Empty” means no row had a value in this run. The literal string `None` in a key-duration column counts as a recorded value.
 
@@ -90,7 +90,7 @@ Positions below follow the exported header, including both participant fields. �
 | 82 | `expName` | PsychoPy automatic | Experiment name from the build. | ldt | Every row |
 | 83 | `expVersion` | PsychoPy automatic | Optional experiment version from the build. | blank here | Empty |
 | 84 | `psychopyVersion` | PsychoPy automatic | Version written by the running experiment. | 2026.2.2 | Every row |
-| 85 | `frameRate` | PsychoPy automatic | Refresh rate estimated during fullscreen window setup. | Hz, 120.04609774509024 | Every row |
+| 85 | `frameRate` | PsychoPy automatic | Refresh rate estimated during fullscreen window setup. | Hz, 120.24957798166257 | Every row |
 | 86 | `expStart` | PsychoPy automatic | Wall-clock date and time of the start synchronization, including UTC offset. PsychoPy reads this string after the synchronization flip. | local date-time string, non-flip sample | Every row |
 | 87 | *(unnamed)* | PsychoPy automatic | Empty field produced by the trailing comma on every exported line. | empty | Empty |
 
@@ -102,7 +102,7 @@ No run 7 trial timed out. The response normally ended the routine before Builder
 
 The paired file has the CSV basename followed by `_frameIntervals.log`. It contains one comma-separated sequence of positive durations in seconds, in presentation order. Within each trial, the first interval begins at the fixation flip and the last ends at the last flip displaying the target. The interval that crosses into the next routine is excluded. Instructions, feedback, ITIs, the break and the end screen contribute no intervals.
 
-In run 7 there are 21,199 intervals. Take the next `recorded_intervals` values for each trial row. Their sum reproduces `trial_last_flip − fixation.started`. Count entries in each slice greater than `1.5 / round(frameRate)`, or 12.5 ms here. The slice count matches `dropped_frames` on all 104 rows. Both whole-run totals are zero.
+In run 7 there are 20,502 intervals. Take the next `recorded_intervals` values for each trial row. Their sum reproduces `trial_last_flip − fixation.started`. Count entries in each slice greater than `1.5 / round(frameRate)`, or 12.5 ms here. The slice count matches `dropped_frames` on all 104 rows. Both whole-run totals are zero.
 
 ## Component names in the six supplied files
 

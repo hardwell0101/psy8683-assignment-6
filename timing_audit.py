@@ -18,6 +18,8 @@ def audit(path):
     counts, exceptions = defaultdict(Counter), []
     offset = 0
     total_drops = 0
+    drop_locations = Counter()
+    ending_on_target = 0
 
     def event(label, first, last, desired, line, row, intervals=(), inside=False):
         measured = (last-first)*hz
@@ -52,9 +54,30 @@ def audit(path):
             bounds.append(bounds[-1]+d)
         pairs = list(zip(bounds,bounds[1:]))
         soa = count(cell(row,"soa"))
-        event("fixation",first,stamp(row,"fix","stopped"),round(.5*hz),line,row,pairs,True)
-        event("prime",stamp(row,"prime"),stamp(row,"prime","stopped"),round(.15*hz),line,row,pairs,True)
-        event(f"SOA {soa}",stamp(row,"prime"),stamp(row,"target"),round(soa*hz/1000),line,row,pairs,True)
+        prime = stamp(row, "prime")
+        prime_off = stamp(row, "prime", "stopped")
+        target = stamp(row, "target")
+        prime_frames = round(.15 * hz)
+        soa_frames = round(soa * hz / 1000)
+        event("fixation", first, stamp(row, "fix", "stopped"), round(.5 * hz), line, row, pairs, True)
+        event("prime", prime, prime_off, prime_frames, line, row, pairs, True)
+        event(f"SOA {soa}", prime, target, soa_frames, line, row, pairs, True)
+        event(f"blank, SOA {soa}", prime_off, target, soa_frames - prime_frames, line, row, pairs, True)
+        for onset, removal in pairs:
+            if removal - onset <= 1.5 / hz:
+                continue
+            # The image at the beginning of an interval remains up until its ending flip.
+            if removal <= prime + 1e-5:
+                stage = "fixation"
+            elif removal <= prime_off + 1e-5:
+                stage = "prime"
+            elif removal <= target + 1e-5:
+                stage = "blank"
+            else:
+                stage = "target"
+            drop_locations[stage] += 1
+            if abs(removal - target) <= 1e-5:
+                ending_on_target += 1
         event("ITI",stamp(row,"iti"),stamp(row,"iti","stopped"),round(.5*hz),line,row)
         if cell(row,"phase") == "practice":
             event("feedback",stamp(row,"feedback"),stamp(row,"feedback","stopped"),hz,line,row)
@@ -68,6 +91,9 @@ def audit(path):
           f"{total_drops} drops; longest = {max(values)*1000:.4f} ms")
     for (label,desired),hist in counts.items():
         print(f"{label}: expected {desired}; achieved frames x frequency {dict(sorted(hist.items()))}")
+    if sum(drop_locations.values()) != total_drops:
+        raise ValueError("event locations do not reconcile with total drops")
+    print(f"long intervals by image held: {dict(drop_locations)}; ending on target onset: {ending_on_target}")
     for entry in exceptions:
         print(entry)
 

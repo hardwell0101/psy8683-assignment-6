@@ -21,7 +21,7 @@ the two-second deadline. Both practice and main tests then accepted 1.999 s.
 On pending practice responses, feedback starts one flip after target removal
 so the program can use the final response. Feedback still receives its full
 frame allotment. Participant 6 had no timeout, so its CSV alone cannot
-establish timeout behavior. Runs 7 and 8 will supply the human rerun verdicts.
+establish timeout behavior. Section 2 gives the results of the two full runs on the corrected build.
 
 **Q4, response-to-removal delay.** Four response trials took over two nominal
 refresh periods from the recorded keypress to the first replacement flip.
@@ -167,34 +167,125 @@ data/6_ldt_2026-11-04_12h59.17.668.csv
 
 ## 2. Timing audit
 
-### The machine
+### Machine and runs
 
-| | Run 7 | Run 8 |
+Both sessions used PsychoPy Studio 2026.2.2 in desktop Run mode. The MacBook Pro had an Apple M5 Pro, 48 GB of memory and macOS 27.2. The experiment ran fullscreen on display 0, the built-in Liquid Retina XDR display (3024 × 1964 physical pixels, 1512 × 982 logical points). The Mac reported 120 Hz for the built-in display during setup.
+
+| | Run 7, quiet repeat | Run 8, muted video |
 | --- | --- | --- |
-| Computer and OS | | |
-| Display, and its refresh rate in the OS settings | | |
-| Full screen? | | |
-| PsychoPy version | | |
-| `frameRate` in the file | | |
-| Other load observed | pending run 7 | pending run 8 |
+| CSV basename, Nov 6 | `7_ldt_2026-11-06_13h53.16.033` | `8_ldt_2026-11-06_12h47.58.644` |
+| Measured rate in CSV | 120.24957798166257 Hz | 120.06897963686515 Hz |
+| Display configuration | Built-in main display. An unmirrored 4K external monitor was connected. | Built-in display. The Mac reported only the built-in display at setup. |
+| Other applications | PsychoPy only for the task. The browser and video server were stopped. ChatGPT reopened after the end screen. | Chrome played a muted, looping 10-second video from PsychoPy’s demo assets. The chat app was open. |
+| Trial rows | 8 practice + 96 experimental | 8 practice + 96 experimental |
+| Correct responses / timeouts | 80 of 104 / 0 | 17 of 104 / 0 |
+
+The first participant 7 session had finished with the chat app open. I repeated it to meet the quiet condition. The accepted run began at 13:53 and ended at 13:57, before ChatGPT reopened at 13:58. Its predecessor is preserved in commit `a7b9399`. Both sessions had zero recorded drops. Run 8 occurred before the accepted repeat. Chrome’s video frame counter advanced throughout the run, and the player reported muted playback. The differing application and monitor setups limit what two runs can establish about the cause of the timing difference. [Browser playback record](evidence/run8_video.txt)
 
 ### Achieved timing
 
-The full keyboard sessions are pending. Both distributions will use the rate saved in the corresponding output file.
+Both measured rates round to 120 Hz. One nominal frame period is 8.333 ms, so I2 counts intervals strictly longer than 12.5 ms. The table uses **elapsed frame periods × number of observations**. For example, 68 × 1 means one fixation lasted about 68 frame periods. The expected count comes from Q5. To compute each observed count, multiply the difference between the event’s two flip timestamps by 120 and round to the nearest integer.
 
-| Event | Q5 frames | Run 7 | Run 8 |
-| --- | --- | --- | --- |
-| fixation | | | |
-| prime | | | |
-| prime to target, SOA 150 | | | |
-| prime to target, SOA 1000 | | | |
-| ITI | | | |
-| feedback | | | |
-| end screen | | | |
-| `dropped_frames` total | | | |
-| longest logged interval (ms) | | | |
+| Event | Expected frames | Run 7 | Run 8 |
+| --- | ---: | --- | --- |
+| Fixation | 60 | 60 × 104 | 60 × 89, 62 × 5, 63 × 4, 64 × 5, 68 × 1 |
+| Prime | 18 | 18 × 104 | 18 × 102, 20 × 1, 21 × 1 |
+| Prime-to-target, 150 ms SOA | 18 | 18 × 52 | 18 × 51, 21 × 1 |
+| Blank after prime, 150 ms SOA | 0 | 0 × 52 | 0 × 52 |
+| Prime-to-target, 1000 ms SOA | 120 | 120 × 52 | 120 × 39, 121 × 1, 122 × 3, 123 × 7, 124 × 2 |
+| Blank after prime, 1000 ms SOA | 102 | 102 × 52 | 102 × 39, 103 × 2, 104 × 3, 105 × 6, 106 × 2 |
+| Inter-trial interval (ITI) | 60 | 60 × 104 | 60 × 87, 61 × 1, 62 × 10, 63 × 3, 64 × 2, 65 × 1 |
+| Practice feedback | 120 | 120 × 8 | 120 × 7, 121 × 1 |
+| End screen | 240 | 240 × 1 | 240 × 1 |
 
-The audit pairs each CSV with its frame log. For any duration that differs from the planned frame count, it reports the row and checks for long intervals during the event. The log covers the trial itself. It excludes feedback, the blank interval after the trial and the end screen.
+The checker recalculated all 208 scores from each participant’s assigned keys. Every stored score agreed, including the incorrect responses in run 8. Both sessions used the same 240-frame maximum target window. Every human trial ended on a keypress, so neither file contains a 240-frame timeout to measure. The opening instructions and the break also ended on a keypress. The build’s separate diagnostic exercised true timeouts as well as presses at 1.999 s. [Timeout pilot](evidence/final_pilot/verification.txt) · [Last-millisecond probe](evidence/submission_pilot/verification.txt)
+
+| Check on the trial window | Run 7 | Run 8 |
+| --- | ---: | ---: |
+| Intervals in I1, all 104 trial slices combined | 20,502 | 21,221 |
+| Intervals longer than 12.5 ms | 0 | 133 |
+| Sum of the CSV’s `dropped_frames` column | 0 | 133 |
+| Trials with at least one such interval | 0 | 38 |
+| Longest interval | 9.8501 ms | 18.7665 ms |
+
+**Run 7.** All fixed-duration events matched their expected elapsed count. Each trial’s logged intervals span fixation onset to the last target flip. The individual slices and the whole log agree with I2. [Checker output](evidence/a6_run7.txt) · [Timing audit](evidence/timing_run7.txt)
+
+**Run 8.** The number of actual flip intervals between the fixation, prime and target boundaries matched the frame settings on every trial. Some intervals took longer than one refresh. The 133 long intervals comprised 50 during fixation, 5 during the prime, 34 during the long-SOA blank and 44 while the target was visible. Exactly one ended on the target-onset flip. The longest interval occurred during the target on practice trial 7. For example, on practice trial 6 (CSV line 8), three long intervals extended the 18-flip prime to 21 elapsed periods. Target onset moved later by the same amount on this short-SOA trial. [Checker output](evidence/a6_run8.txt) · [Timing audit](evidence/timing_run8.txt)
+
+One of eight feedback periods and 17 of 104 ITIs ran long in run 8. The checker flags their **elapsed** durations under Q3/Q4/Q5. Their boundary stamps show how late they finished, but I1 stops at the last target flip. Eleven of the long ITIs followed trials with zero recorded drops. Even when the preceding trial had a drop, its log cannot identify the cause of a later ITI or feedback delay. The frame-count expressions in the build match Q5. Recording every flip in those later routines in a separate diagnostic would distinguish slow flips from an incorrect count. [Run 8 timing audit](evidence/timing_run8.txt)
+
+The target replacement occurred 16.995 ms after a key on experimental trial 75 of run 7 (line 86), and 16.704 ms after a key on experimental trial 33 of run 8 (line 44). Both trials recorded zero drops. The differences slightly exceed two nominal periods. The files establish the delays. Neither contains both the keyboard polling timestamps and the flip interval across target removal needed to explain them. Across all other response trials the replacement was within the checker’s two-period tolerance.
+
+<details><summary>All run 8 fixed-duration exceptions by CSV line</summary>
+
+The entries below show every deviation in the distribution table. A long prime can also lengthen its SOA, so one interval may appear in two event comparisons. For overlapping events the interval contributes only once to the total of 133.
+
+```text
+line 6 fixation: 67.981 elapsed vs 60 planned frames; within-event long intervals (ms): [17.594, 14.241, 17.374, 16.998, 16.682, 16.636, 17.193, 16.578]; trial drops=8
+line 6 feedback: 121.121 elapsed vs 120 planned frames; trial drops=8; outside the recording window; the log cannot identify a cause
+line 8 prime: 21.002 elapsed vs 18 planned frames; within-event long intervals (ms): [17.449, 17.912, 14.0]; trial drops=3
+line 8 SOA 150: 21.002 elapsed vs 18 planned frames; within-event long intervals (ms): [17.449, 17.912, 14.0]; trial drops=3
+line 15 ITI: 63.016 elapsed vs 60 planned frames; trial drops=1; outside the recording window; the log cannot identify a cause
+line 17 SOA 1000: 122.009 elapsed vs 120 planned frames; within-event long intervals (ms): [16.902, 17.358]; trial drops=2
+line 17 blank, SOA 1000: 104.061 elapsed vs 102 planned frames; within-event long intervals (ms): [16.902, 17.358]; trial drops=2
+line 18 fixation: 63.867 elapsed vs 60 planned frames; within-event long intervals (ms): [18.277, 17.266, 16.569, 13.925]; trial drops=8
+line 18 ITI: 62.064 elapsed vs 60 planned frames; trial drops=8; outside the recording window; the log cannot identify a cause
+line 20 SOA 1000: 122.863 elapsed vs 120 planned frames; within-event long intervals (ms): [18.296, 16.729, 13.506]; trial drops=7
+line 20 blank, SOA 1000: 104.995 elapsed vs 102 planned frames; within-event long intervals (ms): [18.296, 16.729, 13.506]; trial drops=7
+line 22 SOA 1000: 121.994 elapsed vs 120 planned frames; within-event long intervals (ms): [18.343, 13.432]; trial drops=2
+line 22 blank, SOA 1000: 104.016 elapsed vs 102 planned frames; within-event long intervals (ms): [18.343, 13.432]; trial drops=2
+line 23 fixation: 63.895 elapsed vs 60 planned frames; within-event long intervals (ms): [17.31, 17.506, 16.741, 13.801]; trial drops=4
+line 24 SOA 1000: 121.168 elapsed vs 120 planned frames; within-event long intervals (ms): [17.132]; trial drops=2
+line 24 blank, SOA 1000: 103.313 elapsed vs 102 planned frames; within-event long intervals (ms): [17.132]; trial drops=2
+line 24 ITI: 63.040 elapsed vs 60 planned frames; trial drops=2; outside the recording window; the log cannot identify a cause
+line 31 ITI: 62.198 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 32 fixation: 62.004 elapsed vs 60 planned frames; within-event long intervals (ms): [18.231, 13.384]; trial drops=2
+line 33 ITI: 64.124 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 34 ITI: 61.856 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 36 fixation: 63.024 elapsed vs 60 planned frames; within-event long intervals (ms): [16.963, 17.268, 16.496]; trial drops=8
+line 36 SOA 1000: 123.047 elapsed vs 120 planned frames; within-event long intervals (ms): [18.589, 16.92, 15.839]; trial drops=8
+line 36 blank, SOA 1000: 104.963 elapsed vs 102 planned frames; within-event long intervals (ms): [18.589, 16.92, 15.839]; trial drops=8
+line 38 SOA 1000: 122.151 elapsed vs 120 planned frames; within-event long intervals (ms): [18.098, 13.44]; trial drops=4
+line 38 blank, SOA 1000: 104.004 elapsed vs 102 planned frames; within-event long intervals (ms): [18.098, 13.44]; trial drops=4
+line 38 ITI: 62.954 elapsed vs 60 planned frames; trial drops=4; outside the recording window; the log cannot identify a cause
+line 39 ITI: 60.963 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 40 ITI: 61.995 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 42 fixation: 62.955 elapsed vs 60 planned frames; within-event long intervals (ms): [17.234, 16.63, 13.519]; trial drops=3
+line 47 SOA 1000: 123.844 elapsed vs 120 planned frames; within-event long intervals (ms): [17.212, 16.709, 17.171, 14.882]; trial drops=4
+line 47 blank, SOA 1000: 105.923 elapsed vs 102 planned frames; within-event long intervals (ms): [17.212, 16.709, 17.171, 14.882]; trial drops=4
+line 50 ITI: 64.062 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 52 fixation: 62.957 elapsed vs 60 planned frames; within-event long intervals (ms): [17.093, 17.232, 17.058]; trial drops=3
+line 54 ITI: 61.978 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 57 fixation: 63.979 elapsed vs 60 planned frames; within-event long intervals (ms): [17.183, 17.817, 16.722, 16.084]; trial drops=4
+line 66 fixation: 63.796 elapsed vs 60 planned frames; within-event long intervals (ms): [18.37, 17.57, 15.715, 16.133]; trial drops=7
+line 67 ITI: 61.987 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 69 ITI: 62.197 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 71 fixation: 62.012 elapsed vs 60 planned frames; within-event long intervals (ms): [17.032, 14.878]; trial drops=5
+line 71 SOA 1000: 122.984 elapsed vs 120 planned frames; within-event long intervals (ms): [16.939, 17.075, 17.067]; trial drops=5
+line 71 blank, SOA 1000: 104.933 elapsed vs 102 planned frames; within-event long intervals (ms): [16.939, 17.075, 17.067]; trial drops=5
+line 72 ITI: 65.037 elapsed vs 60 planned frames; trial drops=2; outside the recording window; the log cannot identify a cause
+line 79 fixation: 62.003 elapsed vs 60 planned frames; within-event long intervals (ms): [18.067, 16.072]; trial drops=2
+line 79 ITI: 61.815 elapsed vs 60 planned frames; trial drops=2; outside the recording window; the log cannot identify a cause
+line 82 fixation: 61.981 elapsed vs 60 planned frames; within-event long intervals (ms): [17.004, 15.962]; trial drops=2
+line 89 SOA 1000: 123.052 elapsed vs 120 planned frames; within-event long intervals (ms): [16.876, 17.597, 15.22]; trial drops=3
+line 89 blank, SOA 1000: 105.103 elapsed vs 102 planned frames; within-event long intervals (ms): [16.876, 17.597, 15.22]; trial drops=3
+line 90 ITI: 61.992 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 92 ITI: 61.987 elapsed vs 60 planned frames; trial drops=0; outside the recording window; the log cannot identify a cause
+line 93 fixation: 64.066 elapsed vs 60 planned frames; within-event long intervals (ms): [16.703, 16.653, 16.992, 13.621]; trial drops=4
+line 94 prime: 20.334 elapsed vs 18 planned frames; within-event long intervals (ms): [18.038, 16.818]; trial drops=3
+line 94 SOA 1000: 123.074 elapsed vs 120 planned frames; within-event long intervals (ms): [18.038, 16.818, 16.445]; trial drops=3
+line 94 blank, SOA 1000: 102.741 elapsed vs 102 planned frames; within-event long intervals (ms): [16.445]; trial drops=3
+line 95 SOA 1000: 123.056 elapsed vs 120 planned frames; within-event long intervals (ms): [17.321, 17.15, 15.391]; trial drops=3
+line 95 blank, SOA 1000: 104.946 elapsed vs 102 planned frames; within-event long intervals (ms): [17.321, 17.15, 15.391]; trial drops=3
+line 99 SOA 1000: 123.944 elapsed vs 120 planned frames; within-event long intervals (ms): [16.705, 16.966, 16.338, 15.556]; trial drops=4
+line 99 blank, SOA 1000: 105.940 elapsed vs 102 planned frames; within-event long intervals (ms): [16.705, 16.966, 16.338, 15.556]; trial drops=4
+line 100 SOA 1000: 123.039 elapsed vs 120 planned frames; within-event long intervals (ms): [16.991, 17.564, 13.624]; trial drops=5
+line 100 blank, SOA 1000: 105.045 elapsed vs 102 planned frames; within-event long intervals (ms): [16.991, 17.564, 13.624]; trial drops=5
+line 101 fixation: 63.018 elapsed vs 60 planned frames; within-event long intervals (ms): [17.481, 17.609, 16.349]; trial drops=3
+line 107 fixation: 62.035 elapsed vs 60 planned frames; within-event long intervals (ms): [17.94, 16.801]; trial drops=2
+```
+
+</details>
 
 ### What the timing evidence establishes
 
@@ -912,19 +1003,15 @@ listening window fails Q7/Q10. D's prime field fails Q4/Q8 as predicted.
 The other checkable cell parts agree under these definitions. The shared
 UNDETERMINED implementation details in section 3 qualify every relevant
 cell, even when its observable parts passed.
-3. The prediction was 120 Hz. Compare with each full run below once collected.
+3. I predicted 120 Hz. The measured rates were 120.250 Hz in run 7 and 120.069 Hz in run 8. Both round to 120, giving the predicted 60-frame fixation and ITI, 18-frame prime and short SOA, 120-frame feedback and long SOA, and 240-frame end screen. Run 7 met all the elapsed targets. Run 8 used the same frame settings, with the longer intervals detailed in section 2.
 4. The expected all-pass verdict missed the final-poll bug described in
 section 1. A frame-counted loop can finish preparing the next display before
 the current target frame has finished. The final check must still collect
 queued key events through the deadline.
-5. The forecast is zero drops for 7 and two for 8 near target onset. Compare
-with the human logs after the two sessions.
+5. I predicted zero drops in run 7 and two in run 8, mainly at target onset. Run 7 had zero. Run 8 had 133, with just one interval ending on target onset. I underestimated both how often a refresh could run long and how widely that could occur throughout a trial. A late flip extends whichever image is currently displayed. The logs locate it in time, but cannot identify which application or system operation delayed each flip.
 6. The predicted longer prime and SOA follow from how this build counts
 frame iterations. A late refresh inside the prime leaves its image up for
-longer and pushes later scheduled flips back. In the final scripted probe
-one prime and its short SOA both spanned 20 nominal frame periods instead
-of 18, while still covering 18 logged flip intervals. The probe is
-separate from the human data.
+longer and pushes later scheduled flips back. In the human video run, practice trial 6 provided a direct example. Both the prime and its short SOA lasted approximately 175 ms (21 periods at 120 Hz), even though each covered the planned 18 recorded flip intervals.
 7. Fixation duration, prime duration and SOA can be compared on the flip
 clock. Nearest-frame rounding bounds the *scheduled* error under the
 assumptions in section 2. Photodiode data would be needed to verify actual

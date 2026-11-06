@@ -99,14 +99,14 @@ spanned the planned 240 frame periods. See
 13 tests, including wrong source fields, scoring and per-trial allocation
 of frame drops. Results are in `evidence/checker_tests.txt`.
 
+### Full human sessions
+
+I completed all 104 trials in each accepted session and supplied the physical keypresses. My first full run as participant 7 had the chat app open. I excluded that run from the quiet comparison and repeated it using Studio’s participant dialog after closing the other application. Commit `a7b9399` preserves the superseded data. The accepted files in `data/` use the 13h53 basename for 7 and the 12h47 basename for 8. The output files from interrupted or failed launches did not enter the analysis.
+
+For participant 8, Studio ran the same compiled experiment with participant 8 and session 001 supplied at startup through a short launcher. It used the usual data, window, device, experiment and save functions. Only the participant-dialog entry was bypassed. I responded on the keyboard while Chrome played a muted looping video. A preliminary launch outside Studio stopped before any trials. For the quiet repeat I used the normal Builder dialog and the built-in main screen while a second monitor was connected. Studio regenerated the local compiled script with its compile time and source path. The compiled run 7 script and the portable script in Git had identical executable syntax after accounting for the generated source-path metadata. Both runs used the same Builder file.
+
+For each accepted CSV, Codex ran `python3 check_output.py` with the expected participant, `--require-log` and `--build ldt.psyexp`. It independently compared the frame-log slices with the stimulus timestamps using `python3 timing_audit.py`. The 104 per-trial counts and whole-run totals agreed in both sessions. Results are in `evidence/a6_run7.txt`, `evidence/a6_run8.txt` and the two corresponding timing audits.
+
 ### AI use for Assignment 6
 
-I supplied my predictions in chat before the new checks. I used the
-written A5 findings to recall the six files. Codex translated my answers
-into the table, calculated frame counts, and committed the predictions.
-After the handoff I used Codex to edit and compile the experiment, write
-and test the checker, run the scripted diagnostic, and draft the report
-from the saved outputs. The report identifies where the first checker
-misread file F and where testing contradicted my prediction about my own
-build. The diagnostic used simulated key events. The full participant
-7 and 8 sessions require my own keyboard responses.
+I asked Codex to handle the technical work and tell me when the assignment needed my input. I supplied my predictions before the new checks, using the written A5 findings to recall the six files. Codex calculated the predicted frame counts, translated my answers into the table, and committed them. After the handoff, Codex generated the instrumentation, compiled the experiment, extended the checker, and wrote the scripted pilot and tests. It drafted the report, data dictionary and reconciliation from the CSVs, frame logs and build. The first checker confused target offset with the keyboard deadline in file F. The corrected version checks both timestamps. I chose to repeat participant 7 when we found the chat had stayed open during the first session. I supplied all participant responses in the two accepted runs. Only the separately labeled diagnostic sessions used simulated key events.
