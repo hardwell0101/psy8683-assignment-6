@@ -23,7 +23,8 @@
   },
   {
     "sha256": [
-      "cd797952468f83e239057748a8c46e2f05535cbc1b1c39d4517c4fef7daa989b"
+      "cd797952468f83e239057748a8c46e2f05535cbc1b1c39d4517c4fef7daa989b",
+      "cd1e378f80be2b25558b8451f3bf0be1b7f4dd1189129e308bd5192b69c10210"
     ],
     "settled": {
       "Q1": "Inspected the participant dialog, two-digit listPath, sequential loops and relative file in the corresponding Builder source. Q1 file evidence separately checks the typed ID against the actual list.",

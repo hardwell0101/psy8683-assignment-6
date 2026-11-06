@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2026.2.2),
-    on Thu Nov  5 21:04:10 2026
+    on Thu Nov  5 21:09:14 2026
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -2000,7 +2000,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     # the Routine "endScreen" was not non-slip safe, so reset the non-slip timer
     routineTimer.reset()
     # Run 'End Experiment' code from setupTask
-    win.saveFrameIntervals(fileName=thisExp.dataFileName + '_frameIntervals.log')
+    win.callOnFlip(win.saveFrameIntervals, fileName=thisExp.dataFileName + '_frameIntervals.log')
     
     # mark experiment as finished
     endExperiment(thisExp, win=win)

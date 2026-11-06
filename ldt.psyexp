@@ -229,7 +229,7 @@
                 <Param name="Begin Routine" val="participantNumber = int(expInfo['participant'])&#10;listPath = f'trial_lists/trials_p{participantNumber:02d}.csv'&#10;wordKey, nonwordKey = ('f', 'j') if participantNumber % 2 else ('j', 'f')&#10;if not expInfo.get('frameRate'):&#10;    raise RuntimeError('Refresh rate could not be measured. Restart on a display with a stable refresh rate.')&#10;refreshHz = round(expInfo['frameRate'])&#10;fixFrames = round(0.5 * refreshHz)&#10;primeFrames = round(0.15 * refreshHz)&#10;responseFrames = round(2 * refreshHz)" valType="extendedCode" updates="constant" plugin="None"/>
                 <Param name="Each Frame" val="" valType="extendedCode" updates="constant" plugin="None"/>
                 <Param name="End Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
-                <Param name="End Experiment" val="win.saveFrameIntervals(fileName=thisExp.dataFileName + '_frameIntervals.log')" valType="extendedCode" updates="constant" plugin="None"/>
+                <Param name="End Experiment" val="win.callOnFlip(win.saveFrameIntervals, fileName=thisExp.dataFileName + '_frameIntervals.log')" valType="extendedCode" updates="constant" plugin="None"/>
                 <Param name="Before JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
                 <Param name="Begin JS Experiment" val="" valType="extendedCode" updates="constant" plugin="None"/>
                 <Param name="Begin JS Routine" val="" valType="extendedCode" updates="constant" plugin="None"/>
